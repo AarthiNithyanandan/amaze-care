@@ -1,0 +1,55 @@
+package com.hexaware.amazecare.restcontroller;
+
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.hexaware.amazecare.dto.PrescriptionDto;
+import com.hexaware.amazecare.entities.Prescription;
+import com.hexaware.amazecare.service.IPrescriptionService;
+
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("/api/prescriptions")
+@Validated
+public class PrescriptionRestController {
+
+    private final IPrescriptionService prescriptionService;
+
+    public PrescriptionRestController(IPrescriptionService prescriptionService) {
+        this.prescriptionService = prescriptionService;
+    }
+
+    @PostMapping("/addPrescription")
+    public Prescription addPrescription(@Valid @RequestBody PrescriptionDto prescriptionDto) {
+        return prescriptionService.addPrescription(prescriptionDto);
+    }
+
+    @PutMapping("/{prescriptionId}")
+    public ResponseEntity<Prescription> updatePrescription(@PathVariable int prescriptionId,  @Valid @RequestBody PrescriptionDto prescriptionDto) {
+        prescriptionDto.setPrescriptionId(prescriptionId);
+        Prescription updatedPrescription = prescriptionService.updatePrescription(prescriptionDto);
+        return ResponseEntity.ok(updatedPrescription);  
+    }
+
+
+    @GetMapping("/doctor/{doctorId}")
+    public List<Prescription> getByDoctorId(@PathVariable int doctorId) {
+        return prescriptionService.getByDoctorId(doctorId);
+    }
+
+    @GetMapping("/medical-record/{recordId}")
+    public Prescription getByMedicalRecordId(@PathVariable int recordId) {
+        return prescriptionService.getByMedicalRecordId(recordId);
+    }
+}
