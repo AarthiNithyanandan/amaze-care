@@ -9,6 +9,6 @@ import com.hexaware.amazecare.entities.Prescription;
 
 public interface PrescriptionRepository extends  JpaRepository<Prescription,Integer>{
 
-	List<Prescription> findByDoctorId(int doctorId);
-	Optional<Prescription> findByRecordId(int recordId);
+	List<Prescription> findByDoctorDoctorId(int doctorId);
+	Optional<Prescription> findByMedicalRecordRecordId(int recordId);
 }

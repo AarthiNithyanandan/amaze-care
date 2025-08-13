@@ -9,10 +9,10 @@ import com.hexaware.amazecare.entities.RecommendTest;
 public interface RecommendTestRepository extends  JpaRepository<RecommendTest,Integer>  {
 
 	
-	 List<RecommendTest> findByAppointmentId(int appointmentId);
+	 List<RecommendTest> findByAppointmentAppointmentId(int appointmentId);
 
 	    List<RecommendTest> findByTestNameIgnoreCase(String testName);
 
-	    List<RecommendTest> findByPatientId(int patientId);
+//	    List<RecommendTest> findByPatientPatientId(int patientId);
 	}
 

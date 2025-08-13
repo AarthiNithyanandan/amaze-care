@@ -36,4 +36,6 @@ public class PatientDto {
 
     @NotBlank(message = "Address is required")
     private String address;
+    
+    private String passwordPatient;
 }

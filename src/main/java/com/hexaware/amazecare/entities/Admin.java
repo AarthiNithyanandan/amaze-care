@@ -14,16 +14,16 @@ public class Admin {
 
     private String name;
     private String email;
-    private String password;
+    private String adminPassword;
     private String contactNumber;
 
    
     public Admin() {}
 
-    public Admin(String name, String email, String password, String contactNumber) {
+    public Admin(String name, String email, String adminPassword, String contactNumber) {
         this.name = name;
         this.email = email;
-        this.password = password;
+        this.adminPassword = adminPassword;
         this.contactNumber = contactNumber;
     }
 
@@ -52,15 +52,17 @@ public class Admin {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
+  
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public String getAdminPassword() {
+		return adminPassword;
+	}
 
-    public String getContactNumber() {
+	public void setAdminPassword(String adminPassword) {
+		this.adminPassword = adminPassword;
+	}
+
+	public String getContactNumber() {
         return contactNumber;
     }
 

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,13 +31,16 @@ public class AppointmentRestController {
     @Autowired
     private IAppointmentService appointmentService;
 
-    @PostMapping
+    @PostMapping("/add")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DOCTOR', 'PATIENT')")
     public ResponseEntity<Appointment> addAppointment(@Valid @RequestBody AppointmentDto appointmentDto) {
         log.info("Received request to add appointment for patientId: {}", appointmentDto.getPatientId());
         Appointment appointment = appointmentService.addAppointment(appointmentDto);
         return new ResponseEntity<>(appointment, HttpStatus.CREATED);
     }
-
+    
+    
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DOCTOR')")
     @PutMapping("/{appointmentId}/status")
     public ResponseEntity<Appointment> updateAppointmentStatus(@PathVariable int appointmentId, @RequestParam String status) {
         log.info("Received request to update status of appointmentId: {} to {}", appointmentId, status);
@@ -44,19 +48,24 @@ public class AppointmentRestController {
         return ResponseEntity.ok(updatedAppointment);
     }
 
+    
     @GetMapping("/{appointmentId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DOCTOR', 'PATIENT')")
     public ResponseEntity<Appointment> getAppointmentById(@PathVariable int appointmentId) {
         log.info("Received request to get appointment by ID: {}", appointmentId);
         Appointment appointment = appointmentService.getAppointmentById(appointmentId);
         return ResponseEntity.ok(appointment);
     }
 
+    
     @GetMapping("/patient/{patientId}")
+    @PreAuthorize("hasAuthority('PATIENT')")
     public ResponseEntity<List<Appointment>> getAppointmentsByPatientId(@PathVariable int patientId) {
         log.info("Received request to get appointments for patientId: {}", patientId);
         List<Appointment> appointments = appointmentService.getAppointmentsByPatientId(patientId);
         return ResponseEntity.ok(appointments);
     }
+    
 
     @GetMapping("/doctor/{doctorId}")
     public ResponseEntity<List<Appointment>> getAppointmentsByDoctorId(@PathVariable int doctorId) {
@@ -64,14 +73,17 @@ public class AppointmentRestController {
         List<Appointment> appointments = appointmentService.getAppointmentsByDoctorId(doctorId);
         return ResponseEntity.ok(appointments);
     }
+    
 
-    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/allAppointments")
     public ResponseEntity<List<Appointment>> getAllAppointments() {
         log.info("Received request to get all appointments");
         List<Appointment> appointments = appointmentService.getAllAppointments();
         return ResponseEntity.ok(appointments);
     }
 
+    
     @GetMapping("/status")
     public ResponseEntity<List<Appointment>> getByStatus(@RequestParam String status) {
         log.info("Received request to get appointments by status: {}", status);
@@ -79,11 +91,14 @@ public class AppointmentRestController {
         return ResponseEntity.ok(appointments);
     }
 
+    
     @DeleteMapping("/patient/{patientId}/cancel")
+    @PreAuthorize("hasAuthority('PATIENT')")
     public ResponseEntity<String> cancelAppointmentsByPatientId(@PathVariable int patientId) {
         log.info("Received request to cancel appointments for patientId: {}", patientId);
         int cancelledCount = appointmentService.cancelAppointmentByPatientId(patientId);
         return ResponseEntity.ok(cancelledCount + " appointments cancelled for patientId: " + patientId);
     }
+    
 }
 

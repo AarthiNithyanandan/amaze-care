@@ -11,6 +11,6 @@ public interface IRecommendTest {
 	    RecommendTest updateTestReport(RecommendTestDto testDto);
 	    List<RecommendTest> getByAppointmentId(int appointmentId);
 	    List<RecommendTest> getByTestName(String testName);
-	    List<RecommendTest> getRecommendedTestsByPatientId(int patientId);
+//	    List<RecommendTest> getRecommendedTestsByPatientId(int patientId);
 	    List<RecommendTest> getAllRecommendTests();
 }

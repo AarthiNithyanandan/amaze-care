@@ -1,6 +1,7 @@
 package com.hexaware.amazecare.entities;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -19,14 +20,9 @@ public class MedicalRecord {
    
     private String diagnosis;
     private String notes;
-    private Timestamp recordDate;
+    private LocalDate recordDate;
     
-    public Timestamp getRecordDate() {
-		return recordDate;
-	}
-	public void setRecordDate(Timestamp recordDate) {
-		this.recordDate = recordDate;
-	}
+   
 	@OneToOne
     @JoinColumn(name = "appointment_id")
     private Appointment appointment;
@@ -41,7 +37,13 @@ public class MedicalRecord {
     private Doctor doctor;
 
 
-	public MedicalRecord(int recordId, String diagnosis, String notes,Timestamp recordDate) {
+	public LocalDate getRecordDate() {
+		return recordDate;
+	}
+	public void setRecordDate(LocalDate recordDate) {
+		this.recordDate = recordDate;
+	}
+	public MedicalRecord(int recordId, String diagnosis, String notes,LocalDate recordDate) {
 		super();
 		this.recordId = recordId;
 	

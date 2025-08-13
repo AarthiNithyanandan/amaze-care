@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @Transactional
-public class ApppointmentServiceImp implements IAppointmentService{
+public class AppointmentServiceImp implements IAppointmentService{
 
 	
 	@Autowired
@@ -42,10 +42,10 @@ public class ApppointmentServiceImp implements IAppointmentService{
     public Appointment addAppointment(AppointmentDto appointmentDto) throws AppointmentAlreadyExistsException, DoctorNotFoundException, PatientNotFoundException {
 		    log.info("Attempting to create new appointment for patient:", appointmentDto.getPatientId());
 		    
-		    Doctor doctor = doctorRepository.findById(appointmentDto.getDoctorId())
-		            .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with ID: " + appointmentDto.getDoctorId()));
-		    Patient patient = patientRepository.findById(appointmentDto.getPatientId())
-		        .orElseThrow(() -> new PatientNotFoundException("Patient not found with ID: " + appointmentDto.getPatientId()));
+		    Doctor doctor = doctorRepository.findById(appointmentDto.getDoctorId()).orElseThrow(() ->
+		    new DoctorNotFoundException("Doctor not found with ID: " + appointmentDto.getDoctorId()));
+		    Patient patient = patientRepository.findById(appointmentDto.getPatientId()).orElseThrow(() -> 
+		    new PatientNotFoundException("Patient not found with ID: " + appointmentDto.getPatientId()));
 		   
 		    
 		    Appointment appointment = new Appointment();
@@ -64,26 +64,23 @@ public class ApppointmentServiceImp implements IAppointmentService{
     public Appointment updateAppointmentStatus(int appointmentId, String status) throws AppointmentNotFoundException{
 		      
 
-		Appointment appointment = appointmentRepository.findById(appointmentId)
-		                .orElseThrow(() -> new AppointmentNotFoundException(
-		                        "Appointment not found with ID:" + appointmentId));
-		        appointment.setStatus(status);
-
-		        return appointmentRepository.save(appointment);
+		Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(() ->
+		new AppointmentNotFoundException("Appointment not found with ID:" + appointmentId));
+		appointment.setStatus(status);
+          return appointmentRepository.save(appointment);
 	}
 	@Override
 	 public Appointment getAppointmentById(int appointmentId) {
         log.info("Fetching appointment with ID:", appointmentId);
-        return appointmentRepository.findById(appointmentId)
-                .orElseThrow(() -> {
-                	log.error("Appointment not found with ID:", +appointmentId);
-                    return new AppointmentNotFoundException("Appointment not found with ID: " + appointmentId);
+        return appointmentRepository.findById(appointmentId).orElseThrow(() -> {
+        log.error("Appointment not found with ID:", +appointmentId);
+        return new AppointmentNotFoundException("Appointment not found with ID: " + appointmentId);
                 });
 	}
 
 	public List<Appointment> getAppointmentsByPatientId(int patientId) throws AppointmentNotFoundException{
 	    log.info("Fetching appointments for patient ID:", patientId);
-	    List<Appointment> appointments = appointmentRepository.findByPatientId(patientId);
+	    List<Appointment> appointments = appointmentRepository.findByPatientPatientId(patientId);
 
 	    if (appointments.isEmpty()) {
 	        log.warn("No appointments found for patient ID:", patientId);
@@ -94,7 +91,7 @@ public class ApppointmentServiceImp implements IAppointmentService{
 
 	public List<Appointment> getAppointmentsByDoctorId(int doctorId) {
 	    log.info("Fetching appointments for doctor ID: {}", doctorId);
-	    List<Appointment> appointments = appointmentRepository.findByDoctorId(doctorId);
+	    List<Appointment> appointments = appointmentRepository.findByDoctorDoctorId(doctorId);
 
 	    if (appointments.isEmpty()) {
 	        log.warn("No appointments found for doctor ID:", doctorId);
@@ -120,7 +117,7 @@ public class ApppointmentServiceImp implements IAppointmentService{
 	}
 
 	public int cancelAppointmentByPatientId(int patientId) {
-	    List<Appointment> appointments = appointmentRepository.findByPatientId(patientId);
+	    List<Appointment> appointments = appointmentRepository.findByPatientPatientId(patientId);
 
 	    if (appointments.isEmpty()) {
 	        log.error("No appointments found for patientId: ", patientId);

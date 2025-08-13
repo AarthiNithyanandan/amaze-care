@@ -22,8 +22,34 @@ public class Patient {
 	    private String email;
 	    private int age;
 	    private String address;
+	    private String passwordPatient;
 	    
-	    @OneToMany(mappedBy = "patient")
+	    public Patient(int patientId, String name, String gender, String contactNumber, String email, int age,
+				String address, String passwordPatient, List<Appointment> appointments) {
+			super();
+			this.patientId = patientId;
+			this.name = name;
+			this.gender = gender;
+			this.contactNumber = contactNumber;
+			this.email = email;
+			this.age = age;
+			this.address = address;
+			this.passwordPatient = passwordPatient;
+			this.appointments = appointments;
+		}
+		public String getPasswordPatient() {
+			return passwordPatient;
+		}
+		public void setPasswordPatient(String passwordPatient) {
+			this.passwordPatient = passwordPatient;
+		}
+		public List<Appointment> getAppointments() {
+			return appointments;
+		}
+		public void setAppointments(List<Appointment> appointments) {
+			this.appointments = appointments;
+		}
+		@OneToMany(mappedBy = "patient")
 	    private List<Appointment> appointments;
 
 		public Patient(int patientId, String name, String gender, String contactNumber, String email, int age,

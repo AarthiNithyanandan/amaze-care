@@ -62,7 +62,7 @@ public class RecommendTestImp implements IRecommendTest{
 
 	public List<RecommendTest> getByAppointmentId(int appointmentId) {
 	    log.info("Fetching recommended tests for appointment ID: {}", appointmentId);
-	    List<RecommendTest> tests = recommendTestRepository.findByAppointmentId(appointmentId);
+	    List<RecommendTest> tests = recommendTestRepository.findByAppointmentAppointmentId(appointmentId);
 	    if (tests.isEmpty()) {
 	        log.error("No recommended tests found for appointment ID: {}", appointmentId);
 	        throw new RecommendTestNotFoundException("No recommended tests found for appointment ID: " + appointmentId);
@@ -80,16 +80,16 @@ public class RecommendTestImp implements IRecommendTest{
 	    }
 	    return tests;
 	}
-	@Override
-	public List<RecommendTest> getRecommendedTestsByPatientId(int patientId) {
-	    log.info("Fetching recommended tests for patient ID: {}", patientId);
-	    List<RecommendTest> tests = recommendTestRepository.findByPatientId(patientId);
-	    if (tests.isEmpty()) {
-	        log.error("No recommended tests found for patient ID: {}", patientId);
-	        throw new RecommendTestNotFoundException("No recommended tests found for patient ID: " + patientId);
-	    }
-	    return tests;
-	}
+//	@Override
+//	public List<RecommendTest> getRecommendedTestsByPatientId(int patientId) {
+//	    log.info("Fetching recommended tests for patient ID: {}", patientId);
+//	    List<RecommendTest> tests = recommendTestRepository.findByPatientPatientId(patientId);
+//	    if (tests.isEmpty()) {
+//	        log.error("No recommended tests found for patient ID: {}", patientId);
+//	        throw new RecommendTestNotFoundException("No recommended tests found for patient ID: " + patientId);
+//	    }
+//	    return tests;
+//	}
 
 	@Override
 	public List<RecommendTest> getAllRecommendTests() {

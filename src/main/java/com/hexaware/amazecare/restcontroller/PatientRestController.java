@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 
+import com.hexaware.amazecare.dto.LoginResponse;
 import com.hexaware.amazecare.dto.PatientDto;
 import com.hexaware.amazecare.entities.Patient;
 import com.hexaware.amazecare.exception.InvalidCredentialsException;
@@ -29,13 +30,13 @@ public class PatientRestController {
         return patient;
     }
 
-    @PostMapping("/login")
-    public Patient loginPatient(@RequestParam String email, @RequestParam String password) throws InvalidCredentialsException {
-        log.info("Login attempt for patient email: {}", email);
-        Patient patient = patientService.loginPatient(email, password);
-        log.info("Patient logged in successfully: {}", email);
-        return patient;
-    }
+//    @PostMapping("/login")
+//    public LoginResponse loginPatient(@RequestParam String email, @RequestParam String password) throws InvalidCredentialsException {
+//        log.info("Login attempt for patient email: {}", email);
+//        LoginResponse patient = patientService.loginPatient(email);
+//        log.info("Patient logged in successfully: {}", email);
+//        return patient;
+//    }
 
     @PutMapping("/{patientId}")
     public Patient updatePatient(@PathVariable int patientId, @Valid @RequestBody PatientDto patientDto) {

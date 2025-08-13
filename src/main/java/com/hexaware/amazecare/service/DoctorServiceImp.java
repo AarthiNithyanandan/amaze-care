@@ -1,26 +1,25 @@
 package com.hexaware.amazecare.service;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-
-
-
-import com.hexaware.amazecare.entities.Doctor;
-import com.hexaware.amazecare.dto.DoctorDto;
-import com.hexaware.amazecare.entities.Appointment;
-import com.hexaware.amazecare.exception.DoctorNotFoundException;
-import com.hexaware.amazecare.exception.InvalidCredentialsException;
-import com.hexaware.amazecare.exception.AppointmentNotFoundException;
-import com.hexaware.amazecare.repository.DoctorRepository;
-import com.hexaware.amazecare.repository.AppointmentRepository;
-
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.hexaware.amazecare.dto.DoctorDto;
+import com.hexaware.amazecare.dto.LoginResponse;
+import com.hexaware.amazecare.entities.Appointment;
+import com.hexaware.amazecare.entities.Doctor;
+import com.hexaware.amazecare.exception.AppointmentNotFoundException;
+import com.hexaware.amazecare.exception.DoctorNotFoundException;
+import com.hexaware.amazecare.exception.InvalidCredentialsException;
+import com.hexaware.amazecare.repository.AppointmentRepository;
+import com.hexaware.amazecare.repository.DoctorRepository;
+import com.hexaware.amazecare.security.JwtService;
+
 import jakarta.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
 	
 @Slf4j
@@ -34,6 +33,13 @@ public class DoctorServiceImp implements IDoctorService {
 
 	    @Autowired
 	    private AppointmentRepository appointmentRepository;
+	    
+	    
+	    @Autowired
+	    private PasswordEncoder passwordEncoder;  // from config bean
+
+	    @Autowired
+	    private JwtService jwtService;
 
 //	    @Override
 //	    public Doctor addDoctor(Doctor doctor) {
@@ -44,20 +50,25 @@ public class DoctorServiceImp implements IDoctorService {
 	    public Doctor addDoctor(DoctorDto doctorDto) {
 	        log.info("Adding new doctor: {}", doctorDto.getName());
 	
+	        if(doctorRepository.findByEmail(doctorDto.getEmail()).isPresent()) {
+	            throw new RuntimeException("Email already exists"); // You can create a custom exception
+	        }
+
 	        Doctor doctor = new Doctor();
 	        doctor.setName(doctorDto.getName());
-	        doctor.setSpecialty(doctorDto.getSpecialty());
+	        doctor.setSpecialty(doctorDto.getSpeciality());
 	        doctor.setExperience(doctorDto.getExperience());
 	        doctor.setQualification(doctorDto.getQualification());
 	        doctor.setDesignation(doctorDto.getDesignation());
 	        doctor.setEmail(doctorDto.getEmail());
-	        doctor.setPasswordDoctor(doctorDto.getPasswordDoctor());
-	        doctor.setContactNumber(doctorDto.getContactNumber());
-	        
-	        return doctorRepository.save(doctor);
-	    }
-	    
 
+	        // Hash password here
+	        doctor.setPasswordDoctor(passwordEncoder.encode(doctorDto.getPasswordDoctor()));
+	        doctor.setContactNumber(doctorDto.getContactNumber());
+
+	        return doctorRepository.save(doctor);
+	    
+	    }
 	    public Doctor updateDoctor(DoctorDto doctorDto) {
 	        log.info("Updating doctor with ID:", doctorDto.getDoctorId());
 
@@ -67,7 +78,7 @@ public class DoctorServiceImp implements IDoctorService {
 	        });
 	 
 	        existingDoctor.setName(doctorDto.getName());
-	        existingDoctor.setSpecialty(doctorDto.getSpecialty());
+	        existingDoctor.setSpecialty(doctorDto.getSpeciality());
 	        existingDoctor.setExperience(doctorDto.getExperience());
 	        existingDoctor.setQualification(doctorDto.getQualification());
 	        existingDoctor.setDesignation(doctorDto.getDesignation());
@@ -78,15 +89,17 @@ public class DoctorServiceImp implements IDoctorService {
 	        return doctorRepository.save(existingDoctor);
 	    }
 
-	    @Override
-	    public Doctor loginDoctor(String email, String password) {
-	    	Doctor doctor = doctorRepository.findByEmailAndPassword(email, password).orElseThrow(() -> {
-	    	 log.error("Invalid login for email:", email);
-	    	 return new DoctorNotFoundException("Invalid email or password");
-	    	 });
-
-	    	return doctor;
-	    }
+//	    @Override
+//	    public Doctor loginDoctor(String email, String passwordDoctor) {
+//	    	Doctor doctor = doctorRepository.findByEmailAndPasswordDoctor(email, passwordDoctor).orElseThrow(() -> {
+//	    	 log.error("Invalid login for email:", email);
+//	    	 return new DoctorNotFoundException("Invalid email or password");
+//	    	 });
+//
+//	    	return doctor;
+//	    }
+	    
+	   
 
 	    @Override
 	    public Doctor getDoctorById(int doctorId) {
@@ -143,14 +156,23 @@ public class DoctorServiceImp implements IDoctorService {
 	    }
 
 	    @Override
-	    public List<Doctor> searchDoctorsBySpecialization(String specialization) {
-	        log.info("Searching for doctors with specialization:", specialization);
-	        List<Doctor> doctors = doctorRepository.findBySpecializationIgnoreCase(specialization);
+	    public List<Doctor> searchDoctorsBySpecialization(String speciality) {
+	        log.info("Searching for doctors with specialization:", speciality);
+	        List<Doctor> doctors = doctorRepository.findBySpecialityIgnoreCase(speciality);
 	        if (doctors.isEmpty()) {
-	        log.warn("No doctors found with specialization:", specialization);
+	        log.warn("No doctors found with specialization:", speciality);
+	        throw new DoctorNotFoundException("No doctors found with name: " + speciality);
 	        }
 	        return doctors;
 	    }
+
+
+		@Override
+		public List<Doctor> getAllDoctors() {
+			
+			return doctorRepository.findAll();
+		}
+	    
 
 
 		

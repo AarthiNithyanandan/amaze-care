@@ -1,16 +1,18 @@
 package com.hexaware.amazecare.dto;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class MedicalRecordDto {
 
@@ -24,7 +26,7 @@ public class MedicalRecordDto {
     private String notes;
 
     @NotNull(message = "Record date is required")
-    private Timestamp recordDate;
+    private LocalDate recordDate;
 
     @NotNull(message = "Appointment ID is required")
     private Integer appointmentId;
@@ -34,6 +36,8 @@ public class MedicalRecordDto {
     
     @NotNull(message = "Prescription ID is required")
     private Integer prescriptionId;
+
+	
     
     
 }

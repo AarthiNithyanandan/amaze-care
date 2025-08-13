@@ -1,6 +1,7 @@
 package com.hexaware.amazecare.entities;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -34,11 +35,11 @@ public class Appointment {
 	   @GeneratedValue(strategy = GenerationType.IDENTITY)
 	   private int appointmentId;
     
-    private Timestamp appointmentDate;
+    private LocalDate appointmentDate;
     private String status;
     private String symptoms;
     private String visitType;
-	public Appointment(int appointmentId,   Timestamp appointmentDate, String status,
+	public Appointment(int appointmentId,   LocalDate appointmentDate, String status,
 			String symptoms, String visitType) {
 		super();
 		this.appointmentId = appointmentId;
@@ -59,10 +60,10 @@ public class Appointment {
 		this.appointmentId = appointmentId;
 	}
 	
-	public Timestamp getAppointmentDate() {
+	public LocalDate getAppointmentDate() {
 		return appointmentDate;
 	}
-	public void setAppointmentDate(Timestamp appointmentDate) {
+	public void setAppointmentDate(LocalDate appointmentDate) {
 		this.appointmentDate = appointmentDate;
 	}
 	public String getStatus() {

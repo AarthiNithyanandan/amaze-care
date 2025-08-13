@@ -1,65 +1,101 @@
 package com.hexaware.amazecare.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
-import com.hexaware.amazecare.dto.DoctorDto;
-import com.hexaware.amazecare.entities.Doctor;
-import com.hexaware.amazecare.exception.DoctorNotFoundException;
-
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.hexaware.amazecare.dto.DoctorDto;
+import com.hexaware.amazecare.entities.Appointment;
+import com.hexaware.amazecare.entities.Doctor;
+import com.hexaware.amazecare.exception.AppointmentNotFoundException;
+import com.hexaware.amazecare.exception.DoctorNotFoundException;
+import com.hexaware.amazecare.repository.AppointmentRepository;
+import com.hexaware.amazecare.repository.DoctorRepository;
+
 @SpringBootTest
-@TestMethodOrder(OrderAnnotation.class)  // To run tests in order
-public class DoctorServiceImpTest {
+
+class DoctorServiceImpTest {
 
     @Autowired
     private DoctorServiceImp doctorService;
 
-  
-    @Test
+    @Autowired
+    private DoctorRepository doctorRepository;
 
-    void testAddDoctor() {
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+
+    private Doctor savedDoctor;
+    private Appointment savedAppointment;
+
+    @BeforeEach
+    void setUp() {
+        doctorRepository.deleteAll();
+        appointmentRepository.deleteAll();
+
         DoctorDto dto = new DoctorDto();
-        dto.setName("Dr. Test");
-        dto.setSpecialty("Cardiology");
-        dto.setExperience(5);
+        dto.setName("John Doe");
+        dto.setSpeciality("Cardiology");
+        dto.setExperience(10);
         dto.setQualification("MD");
         dto.setDesignation("Consultant");
-        dto.setEmail("dr.test@example.com");
-        dto.setPasswordDoctor("password123456");
-        dto.setContactNumber("9876543210");
+        dto.setEmail("john@example.com");
+        dto.setPasswordDoctor("password123");
+        dto.setContactNumber("1234567890");
 
-        Doctor savedDoctor = doctorService.addDoctor(dto);
-        assertNotNull(savedDoctor);
+        savedDoctor = doctorService.addDoctor(dto);
+
+        Appointment appt = new Appointment();
+        appt.setDoctor(savedDoctor);
+        appt.setStatus("Pending");
+        savedAppointment = appointmentRepository.save(appt);
+    }
+
+    @Test
+    void testAddDoctor() {
         assertNotNull(savedDoctor.getDoctorId());
-
-        
+        assertEquals("John Doe", savedDoctor.getName());
     }
 
     @Test
     void testGetDoctorById() {
-    	   DoctorDto dto = new DoctorDto();
-           dto.setName("Dr. Test");
-           dto.setSpecialty("Cardiology");
-           dto.setExperience(5);
-           dto.setQualification("MD");
-           dto.setDesignation("Consultant");
-           dto.setEmail("dr.test@example.com");
-           dto.setPasswordDoctor("password123456");
-           dto.setContactNumber("9876543210");
+        Doctor doctor = doctorService.getDoctorById(savedDoctor.getDoctorId());
+        assertEquals("John Doe", doctor.getName());
+    }
 
-           Doctor savedDoctor = doctorService.addDoctor(dto);
-    
-      
-        assertEquals("Dr.Test", savedDoctor.getName());
+    @Test
+    void testGetDoctorById_NotFound() {
+        assertThrows(DoctorNotFoundException.class, () -> doctorService.getDoctorById(999));
+    }
+
+    @Test
+    void testAcceptAppointment() {
+        String result = doctorService.acceptAppointment(savedAppointment.getAppointmentId());
+        assertEquals("Appointment accepted successfully.", result);
+
+        Appointment updated = appointmentRepository.findById(savedAppointment.getAppointmentId()).get();
+        assertEquals("Accepted", updated.getStatus());
     }
 
   
+    @Test
+    void testFindByName() {
+        List<Doctor> doctors = doctorService.findByName("John Doe");
+        assertFalse(doctors.isEmpty());
+    }
+    @AfterEach
+    void tearDown() {
+        appointmentRepository.deleteById(savedAppointment.getAppointmentId());
+        doctorRepository.deleteById(savedDoctor.getDoctorId());
+    }
+}
+

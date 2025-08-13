@@ -15,7 +15,7 @@ public class Doctor {
      @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int doctorId;
     private String name;
-    private String specialty;
+    private String speciality;
     private int experience;
     private String qualification;
     private String designation;
@@ -39,7 +39,7 @@ public class Doctor {
 		super();
 		this.doctorId = doctorId;
 		this.name = name;
-		this.specialty = specialty;
+		this.speciality = speciality;
 		this.experience = experience;
 		this.qualification = qualification;
 		this.designation = designation;
@@ -54,12 +54,12 @@ public class Doctor {
 	}
 
 
-	public Doctor(String name, String specialty, int experience, String qualification, String designation, String email,
+	public Doctor(String name, String speciality, int experience, String qualification, String designation, String email,
 			String passwordDoctor, String contactNumber, List<Appointment> appointments, List<MedicalRecord> records,
 			List<Prescription> prescriptions) {
 		super();
 		this.name = name;
-		this.specialty = specialty;
+		this.speciality = speciality;
 		this.experience = experience;
 		this.qualification = qualification;
 		this.designation = designation;
@@ -84,10 +84,10 @@ public class Doctor {
 		this.name = name;
 	}
 	public String getSpecialty() {
-		return specialty;
+		return speciality;
 	}
-	public void setSpecialty(String specialty) {
-		this.specialty = specialty;
+	public void setSpecialty(String speciality) {
+		this.speciality = speciality;
 	}
 	public int getExperience() {
 		return experience;

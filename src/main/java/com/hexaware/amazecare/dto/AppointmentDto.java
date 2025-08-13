@@ -1,11 +1,12 @@
 package com.hexaware.amazecare.dto;
 
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.sql.Timestamp;
 
 public class AppointmentDto {
 
@@ -21,7 +22,7 @@ public class AppointmentDto {
 
     @NotNull(message = "Appointment date is required")
     @FutureOrPresent(message = "Appointment date must be in present or future")
-    private Timestamp appointmentDate;
+    private LocalDate appointmentDate;
 
     @NotBlank(message = "Status is required")
     private String status;
@@ -57,11 +58,11 @@ public class AppointmentDto {
         this.patientId = patientId;
     }
 
-    public Timestamp getAppointmentDate() {
+    public LocalDate getAppointmentDate() {
         return appointmentDate;
     }
 
-    public void setAppointmentDate(Timestamp appointmentDate) {
+    public void setAppointmentDate(LocalDate appointmentDate) {
         this.appointmentDate = appointmentDate;
     }
 

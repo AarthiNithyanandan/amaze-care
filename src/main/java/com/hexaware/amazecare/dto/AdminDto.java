@@ -29,7 +29,7 @@ public class AdminDto {
 
     @NotBlank(message = "Password is required")
     @Size(min = 8, message = "Password must be at least 8 characters long")
-    private String password;
+    private String adminPassword;
 
     @Pattern(regexp = "\\d{10}", message = "Contact number must be 10 digits")
     private String contactNumber;

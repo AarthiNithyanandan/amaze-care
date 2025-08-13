@@ -20,7 +20,7 @@ public class DoctorDto {
     private String name;
 
     @NotBlank(message = "Specialty is mandatory")
-    private String specialty;
+    private String speciality;
 
     @Min(value = 0, message = "Experience must be zero or positive")
     private int experience;

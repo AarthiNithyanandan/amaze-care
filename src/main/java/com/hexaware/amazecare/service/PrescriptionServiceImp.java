@@ -82,7 +82,7 @@ public class PrescriptionServiceImp implements IPrescriptionService {
 	        throw new DoctorNotFoundException("Doctor not found with ID: " + doctorId);
 	    }
 
-	    List<Prescription> prescriptions = prescriptionRepository.findByDoctorId(doctorId);
+	    List<Prescription> prescriptions = prescriptionRepository.findByDoctorDoctorId(doctorId);
 	    if (prescriptions.isEmpty()) {
 	        log.warn("No prescriptions found for doctor ID: {}", doctorId);
 	        throw new PrescriptionNotFoundException("Prescriptions not found for: " + doctorId);
@@ -96,7 +96,7 @@ public class PrescriptionServiceImp implements IPrescriptionService {
 	public Prescription getByMedicalRecordId(int recordId){
 	    log.info("Fetching prescription for medical record ID: {}", recordId);
 
-	    Prescription prescription = prescriptionRepository.findByRecordId(recordId).orElseThrow(() -> {
+	    Prescription prescription = prescriptionRepository.findByMedicalRecordRecordId(recordId).orElseThrow(() -> {
 	    log.error("No prescription found for medical record ID: {}", recordId);
 	    return new PrescriptionNotFoundException(
 	   "No prescription found for medical record ID: " + recordId);
@@ -104,6 +104,5 @@ public class PrescriptionServiceImp implements IPrescriptionService {
 
 	    return prescription;
 	}
-	
 
 }

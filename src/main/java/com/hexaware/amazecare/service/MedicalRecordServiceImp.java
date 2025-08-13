@@ -90,7 +90,7 @@ public class MedicalRecordServiceImp implements IMedicalRecordService {
 
 	@Override
 	public MedicalRecord getByAppointmentId(int appointmentId) {
-		 return medicalRecordRepository.findByAppointmentId(appointmentId).orElseThrow(() ->
+		 return medicalRecordRepository.findByAppointmentAppointmentId(appointmentId).orElseThrow(() ->
 		 new MedicalRecordNotFoundException("Medical record not found for appointment ID: " + appointmentId));
 	    }
 
@@ -102,7 +102,7 @@ public class MedicalRecordServiceImp implements IMedicalRecordService {
 
 	@Override
 	public List<MedicalRecord> getByDoctorId(int doctorId) {
-		List<MedicalRecord> records = medicalRecordRepository.findByDoctorId(doctorId);
+		List<MedicalRecord> records = medicalRecordRepository.findByDoctorDoctorId(doctorId);
         if(records.isEmpty()) {
             throw new MedicalRecordNotFoundException("No medical records found for doctor ID: " + doctorId);
         }

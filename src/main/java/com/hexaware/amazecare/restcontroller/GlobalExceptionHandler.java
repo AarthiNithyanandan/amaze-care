@@ -4,10 +4,9 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 
 import com.hexaware.amazecare.exception.AppointmentAlreadyExistsException;
 import com.hexaware.amazecare.exception.AppointmentNotFoundException;
@@ -65,11 +64,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(PatientNotFoundException.class)
-    public ResponseEntity<String> handlePatientNotFoundException(PatientNotFoundException ex) {
-    	log.error("Patient not found", ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-    }
+//    @ExceptionHandler(PatientNotFoundException.class)
+//    public ResponseEntity<String> handlePatientNotFoundException(PatientNotFoundException ex) {
+//    	log.error("Patient not found", ex.getMessage());
+//        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+//    }
 
 
 //    // Handle validation errors for @Valid annotated inputs
@@ -82,21 +81,21 @@ public class GlobalExceptionHandler {
 //        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 //    }
 
-    
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleAllOtherExceptions(Exception ex) {
-    	log.error("Exception occurred", ex.getMessage());
-        return new ResponseEntity<>("Internal server error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<String> handleAllOtherExceptions(Exception ex) {
+//    	log.error("Exception occurred", ex.getMessage());
+//        return new ResponseEntity<>("Internal server error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
     @ExceptionHandler(RecommendTestNotFoundException.class)
     public ResponseEntity<String> handleRecommendTestNotFoundException(RecommendTestNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(PrescriptionNotFoundException.class)
-    public ResponseEntity<String> handlePrescriptionNotFoundException(PrescriptionNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-    }
+//    @ExceptionHandler(PrescriptionNotFoundException.class)
+//    public ResponseEntity<String> handlePrescriptionNotFoundException(PrescriptionNotFoundException ex) {
+//        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+//    }
     
 //  @ExceptionHandler(InvalidInputException.class)
 //  public ResponseEntity<String> handleInvalidInput(InvalidInputException ex) {
@@ -112,4 +111,11 @@ public class GlobalExceptionHandler {
 //  public ResponseEntity<String> handleOperationNotAllowed(OperationNotAllowedException ex) {
 //      return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
 //  }
+    
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
+        log.error("Exception occurred", ex);  // <-- log full stacktrace
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body(Map.of("error", ex.getMessage()));
+    }
 }

@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.amazecare.dto.DoctorDto;
+import com.hexaware.amazecare.dto.LoginResponse;
 import com.hexaware.amazecare.entities.Doctor;
+import com.hexaware.amazecare.exception.InvalidCredentialsException;
 import com.hexaware.amazecare.service.IDoctorService;
 
 import jakarta.validation.Valid;
@@ -47,14 +49,14 @@ public class DoctorRestController {
         log.info("Doctor updated with ID: {}", updatedDoctor.getDoctorId());
         return ResponseEntity.ok(updatedDoctor);
     }
-
-    @PostMapping("/login")
-    public ResponseEntity<Doctor> loginDoctor(@RequestParam String email, @RequestParam String password) {
-        log.info("Login attempt for doctor email: {}", email);
-        Doctor doctor = doctorService.loginDoctor(email, password);
-        log.info("Doctor logged in successfully: {}", email);
-        return ResponseEntity.ok(doctor);
-    }
+//
+//    @PostMapping("/login")
+//    public ResponseEntity<LoginResponse> loginDoctor(@RequestParam String email, @RequestParam String password) throws InvalidCredentialsException {
+//        log.info("Login attempt for doctor email: {}", email);
+//        LoginResponse doctor = doctorService.loginDoctor(email, password);
+//        log.info("Doctor logged in successfully: {}", email);
+//        return ResponseEntity.ok(doctor);
+//    }
 
     @GetMapping("/{doctorId}")
     public Doctor getDoctorById(@PathVariable int doctorId) {
