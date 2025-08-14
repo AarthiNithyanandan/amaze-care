@@ -17,16 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.amazecare.dto.AppointmentDto;
 import com.hexaware.amazecare.dto.DoctorDto;
-import com.hexaware.amazecare.dto.LoginRequest;
-import com.hexaware.amazecare.dto.LoginResponse;
 import com.hexaware.amazecare.dto.PatientDto;
 import com.hexaware.amazecare.entities.Appointment;
 import com.hexaware.amazecare.entities.Doctor;
 import com.hexaware.amazecare.entities.Patient;
-import com.hexaware.amazecare.exception.InvalidCredentialsException;
-import com.hexaware.amazecare.service.AuthenticationService;
 import com.hexaware.amazecare.service.IAdminService;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -37,22 +34,7 @@ public class AdminRestController {
     @Autowired
     private IAdminService adminService;
     
-    @Autowired
-    private AuthenticationService authenticationService;
 
-//    @PostMapping("/login")
-//    public ResponseEntity<LoginResponse> loginAdmin(@RequestBody LoginRequest loginRequest) 
-//            throws InvalidCredentialsException {
-//        log.info("Login attempt for admin email: {}", loginRequest.getEmail());
-//        LoginResponse loginResponse = authenticationService.loginAdmin(
-//            loginRequest.getEmail(), 
-//            loginRequest.getPassword()
-//        );
-//        return ResponseEntity.ok(loginResponse);
-//    }
-
-    
-    // Doctor endpoints
     @PostMapping("/doctors")
     public ResponseEntity<Doctor> addDoctor(@RequestBody DoctorDto doctorDto) {
         return ResponseEntity.ok(adminService.addDoctor(doctorDto));
@@ -83,7 +65,6 @@ public class AdminRestController {
 //        return ResponseEntity.ok(adminService.findDoctorByName(name));
 //    }
 
-    // Patient endpoints
     @PutMapping("/patients")
     public ResponseEntity<Patient> updatePatient(@RequestBody PatientDto patientDto) {
         return ResponseEntity.ok(adminService.updatePatient(patientDto));
@@ -99,9 +80,8 @@ public class AdminRestController {
         return ResponseEntity.ok(adminService.getAllPatients());
     }
 
-    // Appointment endpoints
     @PostMapping("/appointments")
-    public ResponseEntity<Appointment> addAppointment(@RequestBody AppointmentDto appointmentDto) throws Exception {
+    public ResponseEntity<Appointment> addAppointment(@Valid @RequestBody AppointmentDto appointmentDto) throws Exception {
         return ResponseEntity.ok(adminService.addAppointment(appointmentDto));
     }
 
@@ -115,8 +95,5 @@ public class AdminRestController {
         return ResponseEntity.ok(adminService.getAllAppointments());
     }
 
-//    @GetMapping("/appointments/{id}")
-//    public ResponseEntity<Appointment> getAppointmentById(@PathVariable int id) {
-//        return ResponseEntity.ok(adminService.getAppointmentById(id));
-//    }
+
 }

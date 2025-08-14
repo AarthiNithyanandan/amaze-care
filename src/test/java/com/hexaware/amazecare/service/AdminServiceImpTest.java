@@ -1,115 +1,203 @@
 package com.hexaware.amazecare.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.LocalDate;
 import java.util.List;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.hexaware.amazecare.dto.AppointmentDto;
 import com.hexaware.amazecare.dto.DoctorDto;
+import com.hexaware.amazecare.dto.PatientDto;
+import com.hexaware.amazecare.entities.Appointment;
 import com.hexaware.amazecare.entities.Doctor;
 import com.hexaware.amazecare.entities.Patient;
-
-import lombok.extern.slf4j.Slf4j;
+import com.hexaware.amazecare.repository.AppointmentRepository;
+import com.hexaware.amazecare.repository.DoctorRepository;
+import com.hexaware.amazecare.repository.PatientRepository;
 
 @SpringBootTest
-@ActiveProfiles("test")
-@Slf4j
-@Transactional // ensures DB changes are rolled back after each test
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AdminServiceImpTest {
 
     @Autowired
-    private AdminServiceImp adminService;
+    private IAdminService adminService;
 
-    private static int createdDoctorId;
-    private static int createdPatientId;
+    @Autowired
+    private DoctorRepository doctorRepository;
+
+    @Autowired
+    private PatientRepository patientRepository;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+
+    private Doctor testDoctor;
+    private Patient testPatient;
+
+    @BeforeEach
+    public void setup() {
+        
+
+        testDoctor = new Doctor();
+        testDoctor.setName("Dr. Arvind");
+        testDoctor.setSpecialty("Orthopedics");
+        testDoctor.setEmail("arvind@amazecare.com");
+        testDoctor.setPasswordDoctor("arvind123");
+        testDoctor.setContactNumber("9998887770");
+        testDoctor.setExperience(10);
+        testDoctor.setQualification("MS");
+        testDoctor.setDesignation("Consultant");
+        doctorRepository.save(testDoctor);
+
+        testPatient = new Patient();
+        testPatient.setName("Sneha");
+        testPatient.setEmail("sneha@amazecare.com");
+        testPatient.setContactNumber("8887776660");
+        testPatient.setAge(35);
+        testPatient.setGender("Female");
+        testPatient.setAddress("Mumbai");
+        testPatient.setPasswordPatient("sneha123");
+        patientRepository.save(testPatient);
+    }
 
     @Test
-    @Order(1)
-    @Rollback
-    void testAddDoctor() {
-        log.info("Starting test: addDoctor");
+    public void testAddDoctorViaAdmin() {
         DoctorDto dto = new DoctorDto();
-        dto.setName("Test Doctor");
+        dto.setName("Dr. Neeraj");
         dto.setSpeciality("Cardiology");
-        dto.setExperience(10);
-        dto.setQualification("MBBS");
-        dto.setDesignation("Consultant");
+        dto.setEmail("neeraj@amazecare.com");
+        dto.setPasswordDoctor("neeraj123");
+        dto.setContactNumber("7776665550");
+        dto.setExperience(12);
+        dto.setQualification("DM");
+        dto.setDesignation("Senior Consultant");
 
         Doctor doctor = adminService.addDoctor(dto);
-        createdDoctorId = doctor.getDoctorId();
-
-        log.info("Doctor created with ID: {}", createdDoctorId);
-        Assertions.assertNotNull(doctor.getDoctorId());
-        Assertions.assertEquals("Cardiology", doctor.getSpecialty());
+        assertNotNull(doctor);
+        assertEquals("Dr. Neeraj", doctor.getName());
     }
-//
-//    @Test
-//    @Order(2)
-//    @Rollback
-//    void testAddPatient() {
-//        log.info("Starting test: addPatient");
-//        PatientDto dto = new PatientDto();
-//        dto.setName("Test Patient");
-//        dto.setGender("Male");
-//        dto.setContactNumber("9876543210");
-//        dto.setEmail("testpatient@example.com");
-//        dto.setAge(30);
-//        dto.setAddress("Test Address");
-//
-//        Patient patient = adminService.addPatient(dto);
-//        createdPatientId = patient.getPatientId();
-//
-//        log.info("Patient created with ID: {}", createdPatientId);
-//        Assertions.assertNotNull(patient.getPatientId());
-//        Assertions.assertEquals("Male", patient.getGender());
-//    }
 
     @Test
-    @Order(3)
-    @Rollback
-    void testGetAllDoctors() {
-        log.info("Fetching all doctors");
+    public void testUpdateDoctorViaAdmin() {
+        DoctorDto dto = new DoctorDto();
+        dto.setDoctorId(testDoctor.getDoctorId());
+        dto.setName("Dr. Arvind Updated");
+        dto.setSpeciality("Orthopedics");
+        dto.setEmail("arvind@amazecare.com");
+        dto.setPasswordDoctor("newpass123");
+        dto.setContactNumber("9998887770");
+        dto.setExperience(11);
+        dto.setQualification("MS");
+        dto.setDesignation("Senior Consultant");
+
+        Doctor updated = adminService.updateDoctor(dto);
+        assertEquals("Dr. Arvind Updated", updated.getName());
+    }
+
+    @Test
+    public void testDeleteDoctorViaAdmin() {
+        String msg = adminService.deleteDoctor(testDoctor.getDoctorId());
+        assertEquals("Doctor deleted successfully.", msg);
+        assertFalse(doctorRepository.findById(testDoctor.getDoctorId()).isPresent());
+    }
+
+    @Test
+    public void testGetAllDoctorsViaAdmin() {
         List<Doctor> doctors = adminService.getAllDoctors();
-        Assertions.assertNotNull(doctors);
-        log.info("Doctors found: {}", doctors.size());
+        assertTrue(doctors.size() >= 1);
     }
 
     @Test
-    @Order(4)
-    @Rollback
-    void testGetAllPatients() {
-        log.info("Fetching all patients");
+    public void testUpdatePatientViaAdmin() {
+        PatientDto dto = new PatientDto();
+        dto.setPatientId(testPatient.getPatientId());
+        dto.setName("Sneha Updated");
+        dto.setEmail("sneha@amazecare.com");
+        dto.setPasswordPatient("newpass456");
+        dto.setContactNumber("8887776660");
+        dto.setAge(36);
+        dto.setGender("Female");
+        dto.setAddress("Pune");
+
+        Patient updated = adminService.updatePatient(dto);
+        assertEquals("Sneha Updated", updated.getName());
+    }
+
+    @Test
+    public void testDeletePatientViaAdmin() {
+        String msg = adminService.deletePatient(testPatient.getPatientId());
+        assertEquals("Patient deleted successfully.", msg);
+        assertFalse(patientRepository.findById(testPatient.getPatientId()).isPresent());
+    }
+
+    @Test
+    public void testGetAllPatientsViaAdmin() {
         List<Patient> patients = adminService.getAllPatients();
-        Assertions.assertNotNull(patients);
-        log.info("Patients found: {}", patients.size());
+        assertTrue(patients.size() >= 1);
     }
 
     @Test
-    @Order(5)
-    @Rollback
-    void testDeleteDoctor() {
-        log.info("Deleting doctor with ID: {}", createdDoctorId);
-        String result = adminService.deleteDoctor(createdDoctorId);
-        log.info(result);
-        Assertions.assertTrue(result.contains("deleted"));
+    public void testAddAppointmentViaAdmin() {
+        AppointmentDto dto = new AppointmentDto();
+        dto.setDoctorId(testDoctor.getDoctorId());
+        dto.setPatientId(testPatient.getPatientId());
+        dto.setAppointmentDate(LocalDate.now().plusDays(1));
+        dto.setStatus("Scheduled");
+        dto.setSymptoms("Joint pain");
+        dto.setVisitType("In-person");
+
+        Appointment appointment = adminService.addAppointment(dto);
+        assertNotNull(appointment);
+        assertEquals("Scheduled", appointment.getStatus());
     }
 
     @Test
-    @Order(6)
-    @Rollback
-    void testDeletePatient() {
-        log.info("Deleting patient with ID: {}", createdPatientId);
-        String result = adminService.deletePatient(createdPatientId);
-        log.info(result);
-        Assertions.assertTrue(result.contains("deleted"));
+    public void testUpdateAppointmentStatusViaAdmin() {
+        AppointmentDto dto = new AppointmentDto();
+        dto.setDoctorId(testDoctor.getDoctorId());
+        dto.setPatientId(testPatient.getPatientId());
+        dto.setAppointmentDate(LocalDate.now().plusDays(2));
+        dto.setStatus("Scheduled");
+        dto.setSymptoms("Back pain");
+        dto.setVisitType("Online");
+
+        Appointment appointment = adminService.addAppointment(dto);
+        Appointment updated = adminService.updateAppointmentStatus(appointment.getAppointmentId(), "Completed");
+
+        assertEquals("Completed", updated.getStatus());
     }
+
+    @Test
+    public void testGetAllAppointmentsViaAdmin() {
+        List<Appointment> appointments = adminService.getAllAppointments();
+        assertNotNull(appointments);
+    }
+
+    @Test
+    public void testGetAppointmentByIdViaAdmin() {
+        AppointmentDto dto = new AppointmentDto();
+        dto.setDoctorId(testDoctor.getDoctorId());
+        dto.setPatientId(testPatient.getPatientId());
+        dto.setAppointmentDate(LocalDate.now().plusDays(3));
+        dto.setStatus("Scheduled");
+        dto.setSymptoms("Migraine");
+        dto.setVisitType("In-person");
+
+        Appointment appointment = adminService.addAppointment(dto);
+        Appointment fetched = adminService.getAppointmentById(appointment.getAppointmentId());
+
+        assertEquals(appointment.getAppointmentId(), fetched.getAppointmentId());
+    }
+    
+   
+    
 }
+

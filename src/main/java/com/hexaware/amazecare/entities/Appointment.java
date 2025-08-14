@@ -1,8 +1,10 @@
 package com.hexaware.amazecare.entities;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -18,16 +20,20 @@ public class Appointment {
 
 	@ManyToOne
 	@JoinColumn(name = "doctor_id")
+	 @JsonBackReference
 	 private Doctor doctor;
 	
 	   @ManyToOne
 	    @JoinColumn(name = "patient_id")
+	   @JsonBackReference
 	    private Patient patient;
 	   
 	   @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL)
+	   @JsonManagedReference
 	   private MedicalRecord medicalRecord;
 
 	   @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
+	   @JsonManagedReference
 	   private List<RecommendTest> recommendedTests;
 
 	   

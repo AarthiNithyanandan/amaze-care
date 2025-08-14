@@ -28,15 +28,16 @@ public class RecommendTestRestController {
 
     @Autowired
     private IRecommendTest recommendTestService;
+    
     @PreAuthorize("hasAuthority('DOCTOR')")
     @PostMapping("/add")
     public RecommendTest addRecommendTest(@Valid @RequestBody RecommendTestDto testDto) {
         log.info("Received request to add recommended test: {}", testDto.getTestName());
         return recommendTestService.addTest(testDto);
     }
+
     
-    
-    @PreAuthorize("hasAuthority('DOCTOR')")
+    @PreAuthorize("hasAuthority('DOCTOR','ADMIN')")
     @PutMapping("/{testId}")
     public RecommendTest updateRecommendTest(@PathVariable int testId, @Valid @RequestBody RecommendTestDto testDto) {
         log.info("Received request to update recommended test with ID: {}", testId);

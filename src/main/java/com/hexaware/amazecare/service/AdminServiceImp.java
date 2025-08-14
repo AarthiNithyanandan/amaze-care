@@ -1,8 +1,13 @@
+/*Author name:Aarthi
+ * Date modified:10-8-2025
+ * Service implementation for managing Admin.
+ *
+ * Responsibilities:
+ * Manages Appointments,Doctors,Patients and medicall records
+ */
+
 package com.hexaware.amazecare.service;
-
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,16 +46,8 @@ public class AdminServiceImp implements IAdminService {
     private AdminRepository adminRepository;
  
     
-    @Autowired
-    private PasswordEncoder passwordEncoder;  // from config bean
-
-    @Autowired
-    private JwtService jwtService;
 
     
-   
-
-    // Doctor management
     @Override
     public Doctor addDoctor(DoctorDto doctorDto) {
         return doctorService.addDoctor(doctorDto);

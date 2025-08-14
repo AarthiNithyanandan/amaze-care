@@ -2,6 +2,8 @@ package com.hexaware.amazecare.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,13 +27,16 @@ public class Doctor {
     
     
     @OneToMany(mappedBy = "doctor")
+    @JsonManagedReference
     private List<Appointment> appointments;
     
     @OneToMany(mappedBy = "doctor")
+    @JsonManagedReference
     private List<MedicalRecord> records;
 
     
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Prescription> prescriptions;
     
 	public Doctor(int doctorId, String name, String specialty, int experience, String qualification, String designation,

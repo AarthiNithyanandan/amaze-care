@@ -47,7 +47,7 @@ class MedicalRecordServiceImpTest {
 
     @BeforeEach
     void setUp() {
-        // Create doctor
+   
         testDoctor = new Doctor();
         testDoctor.setName("Test Doctor");
         testDoctor.setSpecialty("Cardiology");
@@ -59,13 +59,11 @@ class MedicalRecordServiceImpTest {
         testDoctor.setContactNumber("9876543210");
         doctorRepository.save(testDoctor);
 
-        // Create appointment
         testAppointment = new Appointment();
         testAppointment.setDoctor(testDoctor);
         testAppointment.setStatus("Pending");
         appointmentRepository.save(testAppointment);
 
-        // Create prescription
         testPrescription = new Prescription();
         testPrescription.setMedicineName("Paracetamol");
         testPrescription.setDosage("500mg");
@@ -73,7 +71,6 @@ class MedicalRecordServiceImpTest {
         testPrescription.setInstructions("After meals");
         testPrescription.setDoctor(testDoctor);
         prescriptionRepository.save(testPrescription);
-
 
         MedicalRecordDto dto = new MedicalRecordDto();
         dto.setDiagnosis("Flu");
@@ -87,7 +84,7 @@ class MedicalRecordServiceImpTest {
     }
 
     @AfterEach
-    void tearDown() {
+    void delete() {
         medicalRecordRepository.deleteById(testMedicalRecord.getRecordId());
         prescriptionRepository.deleteById(testPrescription.getPrescriptionId());
         appointmentRepository.deleteById(testAppointment.getAppointmentId());
@@ -137,5 +134,15 @@ class MedicalRecordServiceImpTest {
             medicalRecordService.getByDoctorId(99999);
         });
     }
+    
+ 
+
+//    @AfterEach
+//    public void cleanup() {
+//        appointmentRepository.deleteAll();
+//        doctorRepository.deleteAll();
+//        
+//    }
+
 }
 

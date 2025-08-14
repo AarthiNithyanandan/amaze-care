@@ -1,6 +1,13 @@
 package com.hexaware.amazecare.service;
 
-
+/*Author name:Aarthi
+ * Date modified:12-8-25
+ * Service implementation for managing Patient entities.
+ *
+ * Responsibilities:
+ *  Add, update, delete, and fetch patient information
+ *  
+ */
 
 import java.util.List;
 
@@ -28,10 +35,8 @@ public class PatientServiceImp implements IPatientService {
    private PatientRepository patientRepository;
 	 
 	 @Autowired
-	    private PasswordEncoder passwordEncoder;  // from config bean
+	    private PasswordEncoder passwordEncoder; 
 
-	    @Autowired
-	    private JwtService jwtService;
 	 
 	
 	    public Patient addPatient(PatientDto patientDto) {
@@ -71,10 +76,9 @@ public class PatientServiceImp implements IPatientService {
 	 
 	 @Override
 	    public String deletePatient(int patientId) {
-	        Patient patient = patientRepository.findById(patientId)
-	                .orElseThrow(() -> {
-	                    log.error("Patient not found with ID: {}", patientId);
-	                    return new PatientNotFoundException("Patient not found with ID: " + patientId);
+	        Patient patient = patientRepository.findById(patientId).orElseThrow(() -> {
+	         log.error("Patient not found with ID: {}", patientId);
+	       return new PatientNotFoundException("Patient not found with ID: " + patientId);
 	                });
 
 	        patientRepository.delete(patient);

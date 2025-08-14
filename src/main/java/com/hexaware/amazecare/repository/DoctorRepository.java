@@ -14,7 +14,7 @@ public interface DoctorRepository  extends  JpaRepository<Doctor,Integer> {
 
 	    
 
-//	Optional<Doctor> findByEmailAndPasswordDoctor(String email, String passwordDoctor);
+
 
 	Optional<Doctor> findByEmail(String email);
 	    List<Doctor> findByNameIgnoreCase(String name);

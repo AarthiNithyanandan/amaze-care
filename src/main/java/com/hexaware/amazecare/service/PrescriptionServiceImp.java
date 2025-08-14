@@ -1,3 +1,12 @@
+/*Author name:Aarthi
+ * Date modified:12-8-2025
+ * Service implementation for managing Prescription entities.
+ *
+ * Responsibilities:
+ * Add, update, and fetch prescriptions
+ */
+
+
 package com.hexaware.amazecare.service;
 
 import java.util.List;

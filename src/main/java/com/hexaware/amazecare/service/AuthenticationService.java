@@ -1,3 +1,11 @@
+
+/*Author name:Aarthi
+ * Date modified:10-8-2025
+ * Service implementation for managing Authentication
+ *
+ * Responsibilities:
+ * Manages logins of patient,admin and doctor
+ */
 package com.hexaware.amazecare.service;
 
 import org.springframework.beans.factory.annotation.Autowired;

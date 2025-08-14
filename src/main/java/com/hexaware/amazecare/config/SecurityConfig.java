@@ -40,19 +40,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Public authentication endpoints (login, token generation)
+   
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/patients/register").permitAll() 
-                // Admin-only endpoints
+                
                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                 
-                // Doctor-only endpoints
+               
                 .requestMatchers("/api/doctor/**").hasAuthority("DOCTOR")
                 
-                // Patient-only endpoints
+               
                 .requestMatchers("/api/patient/**").hasAuthority("PATIENT")
                 
-                // Any other request must be authenticated
+              
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session

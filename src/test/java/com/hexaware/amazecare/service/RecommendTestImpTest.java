@@ -52,13 +52,11 @@ class RecommendTestImpTest {
         testDoctor.setContactNumber("9999999999");
         doctorRepository.save(testDoctor);
 
-        // Create appointment
         testAppointment = new Appointment();
         testAppointment.setDoctor(testDoctor);
         testAppointment.setStatus("Scheduled");
         appointmentRepository.save(testAppointment);
 
-        // Create RecommendTest via service
         RecommendTestDto dto = new RecommendTestDto();
         dto.setTestName("Blood Test");
         dto.setDescription("Basic blood work");

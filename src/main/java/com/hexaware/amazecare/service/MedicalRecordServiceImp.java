@@ -1,6 +1,22 @@
 package com.hexaware.amazecare.service;
 
 
+/*Author name:Aarthi
+ * Date modified:11-8-25
+ * Service implementation for managing MedicalRecord entities.
+ * 
+ * Responsibilities:
+ *  - Add new medical records
+ *  - Update existing medical records
+ *  - Retrieve medical records by record ID, appointment ID, or doctor ID
+ * 
+ * Works with:
+ *  - Appointment
+ *  - Doctor
+ *  - Prescription
+ * 
+ */
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +44,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Transactional
 public class MedicalRecordServiceImp implements IMedicalRecordService {
-
-	
 	
 	 @Autowired
 	    private MedicalRecordRepository medicalRecordRepository;
@@ -46,18 +60,16 @@ public class MedicalRecordServiceImp implements IMedicalRecordService {
 	    public MedicalRecord addMedicalRecord(MedicalRecordDto recordDto) {
 	        log.info("Adding new medical record for appointment ID: {}", recordDto.getAppointmentId());
 	        Appointment appointment = appointmentRepository.findById(recordDto.getAppointmentId()).orElseThrow(() -> {
-	               log.error("Appointment not found with ID: {}", recordDto.getAppointmentId());
-	               return new AppointmentNotFoundException("Appointment not found with ID: " + recordDto.getAppointmentId());
+	        log.error("Appointment not found with ID: {}", recordDto.getAppointmentId());
+	        return new AppointmentNotFoundException("Appointment not found with ID: " + recordDto.getAppointmentId());
 	                });
-
 	        Doctor doctor = doctorRepository.findById(recordDto.getDoctorId()).orElseThrow(() -> {
-	                    log.error("Doctor not found with ID:", recordDto.getDoctorId());
-	                    return new DoctorNotFoundException("Doctor not found with ID: " + recordDto.getDoctorId());
+	        log.error("Doctor not found with ID:", recordDto.getDoctorId());
+	             return new DoctorNotFoundException("Doctor not found with ID: " + recordDto.getDoctorId());
 	                });
 	     
-	        Prescription prescription = prescriptionRepository.findById(recordDto.getPrescriptionId())
-	        	    .orElseThrow(() -> {
-	        	        return new PrescriptionNotFoundException("Prescription not found with ID: " + recordDto.getPrescriptionId());
+	        Prescription prescription = prescriptionRepository.findById(recordDto.getPrescriptionId()).orElseThrow(() -> {
+	        	 return new PrescriptionNotFoundException("Prescription not found with ID: " + recordDto.getPrescriptionId());
 	        	    });
 	        
 

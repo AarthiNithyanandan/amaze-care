@@ -41,6 +41,8 @@ public class DoctorRestController {
         log.info("Doctor added with ID: {}", doctor.getDoctorId());
         return new ResponseEntity<>(doctor, HttpStatus.CREATED);
     }
+    
+    
     @PutMapping("/{doctorId}")
     public ResponseEntity<Doctor> updateDoctor(@PathVariable int doctorId, @Valid @RequestBody DoctorDto doctorDto) {
         log.info("Received request to update doctor with ID: {}", doctorId);
@@ -49,20 +51,13 @@ public class DoctorRestController {
         log.info("Doctor updated with ID: {}", updatedDoctor.getDoctorId());
         return ResponseEntity.ok(updatedDoctor);
     }
-//
-//    @PostMapping("/login")
-//    public ResponseEntity<LoginResponse> loginDoctor(@RequestParam String email, @RequestParam String password) throws InvalidCredentialsException {
-//        log.info("Login attempt for doctor email: {}", email);
-//        LoginResponse doctor = doctorService.loginDoctor(email, password);
-//        log.info("Doctor logged in successfully: {}", email);
-//        return ResponseEntity.ok(doctor);
-//    }
 
     @GetMapping("/{doctorId}")
     public Doctor getDoctorById(@PathVariable int doctorId) {
         log.info("Fetching doctor by ID: {}", doctorId);
         return doctorService.getDoctorById(doctorId);
     }
+    
 
     @PostMapping("/appointments/{appointmentId}/accept")
     public ResponseEntity<String> acceptAppointment(@PathVariable int appointmentId) {
@@ -70,6 +65,7 @@ public class DoctorRestController {
         String response = doctorService.acceptAppointment(appointmentId);
         return ResponseEntity.ok(response);
     }
+    
     @PostMapping("/appointments/{appointmentId}/reject")
     public ResponseEntity<String> rejectAppointment(@PathVariable int appointmentId) {
         log.info("Rejecting appointment with ID: {}", appointmentId);
@@ -97,4 +93,14 @@ public class DoctorRestController {
         List<Doctor> doctors = doctorService.searchDoctorsBySpecialization(specialization);
         return ResponseEntity.ok(doctors);
     }
+    
+    
+    //
+//  @PostMapping("/login")
+//  public ResponseEntity<LoginResponse> loginDoctor(@RequestParam String email, @RequestParam String password) throws InvalidCredentialsException {
+//      log.info("Login attempt for doctor email: {}", email);
+//      LoginResponse doctor = doctorService.loginDoctor(email, password);
+//      log.info("Doctor logged in successfully: {}", email);
+//      return ResponseEntity.ok(doctor);
+//  }
 }

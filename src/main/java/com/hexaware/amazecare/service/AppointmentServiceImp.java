@@ -1,7 +1,15 @@
+/*Author name:Aarthi
+ * Date modified:12-8-2025
+ * Service implementation for managing Appointments.
+ *
+ * Responsibilities:
+ * Book, update, cancel, and fetch appointments
+ */
+
+
 package com.hexaware.amazecare.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +22,6 @@ import com.hexaware.amazecare.exception.AppointmentAlreadyExistsException;
 import com.hexaware.amazecare.exception.AppointmentNotFoundException;
 import com.hexaware.amazecare.exception.DoctorNotFoundException;
 import com.hexaware.amazecare.exception.PatientNotFoundException;
-
 import com.hexaware.amazecare.repository.AppointmentRepository;
 import com.hexaware.amazecare.repository.DoctorRepository;
 import com.hexaware.amazecare.repository.PatientRepository;
@@ -57,7 +64,8 @@ public class AppointmentServiceImp implements IAppointmentService{
 		    appointment.setVisitType(appointmentDto.getVisitType());
 		    Appointment savedAppointment = appointmentRepository.save(appointment);
 		    log.info("Successfully created appointment with ID:", savedAppointment.getAppointmentId());
-		    return savedAppointment;
+		    return appointmentRepository.findById(savedAppointment.getAppointmentId()).orElse(savedAppointment);
+
 	}
 	
 	@Override
@@ -69,13 +77,15 @@ public class AppointmentServiceImp implements IAppointmentService{
 		appointment.setStatus(status);
           return appointmentRepository.save(appointment);
 	}
+	
+	
 	@Override
 	 public Appointment getAppointmentById(int appointmentId) {
         log.info("Fetching appointment with ID:", appointmentId);
         return appointmentRepository.findById(appointmentId).orElseThrow(() -> {
         log.error("Appointment not found with ID:", +appointmentId);
         return new AppointmentNotFoundException("Appointment not found with ID: " + appointmentId);
-                });
+          });
 	}
 
 	public List<Appointment> getAppointmentsByPatientId(int patientId) throws AppointmentNotFoundException{

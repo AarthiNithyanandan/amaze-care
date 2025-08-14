@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,32 +31,35 @@ public class MedicalRecordRestController {
     @Autowired
     private IMedicalRecordService medicalRecordService;
 
-  
+    @PreAuthorize("hasAuthority('DOCTOR')")
     @PostMapping("/add")
     public ResponseEntity<MedicalRecord> addMedicalRecord(@RequestBody MedicalRecordDto recordDto) {
         MedicalRecord medicalRecord = medicalRecordService.addMedicalRecord(recordDto);
         return new ResponseEntity<>(medicalRecord, HttpStatus.CREATED);
     }
-
+    @PreAuthorize("hasAuthority('DOCTOR')")
     @PutMapping("/{recordId}")
     public MedicalRecord updateMedicalRecord(@PathVariable int recordId, @Valid @RequestBody MedicalRecordDto medicalRecordDto) {
         medicalRecordDto.setRecordId(recordId); 
         return medicalRecordService.updateMedicalRecord(medicalRecordDto);
     }
-
+    
+    @PreAuthorize("hasAuthority('DOCTOR')")
     @GetMapping("/appointment/{appointmentId}")
     public ResponseEntity<MedicalRecord> getByAppointmentId(@PathVariable int appointmentId) {
         MedicalRecord medicalRecord = medicalRecordService.getByAppointmentId(appointmentId);
         return ResponseEntity.ok(medicalRecord);
     }
-
+     
+    @PreAuthorize("hasAuthority('DOCTOR','PATIENT')")
     @GetMapping("/{recordId}")
     public ResponseEntity<MedicalRecord> getByRecordId(@PathVariable int recordId) {
         MedicalRecord medicalRecord = medicalRecordService.getByRecordId(recordId);
         return ResponseEntity.ok(medicalRecord);
     }
-
+    
     @GetMapping("/doctor/{doctorId}")
+    @PreAuthorize("hasAuthority('DOCTOR')")
     public ResponseEntity<List<MedicalRecord>> getByDoctorId(@PathVariable int doctorId) {
         List<MedicalRecord> records = medicalRecordService.getByDoctorId(doctorId);
         return ResponseEntity.ok(records);

@@ -1,3 +1,13 @@
+/*Author name:Aarthi
+ *Date modified:9-8-2025
+ * Service implementation for managing Doctor entities.
+ *
+ * Responsibilities:
+ *   Add, update, fetch doctor information
+ *   Provides doctor-specific operation implemetations
+ */
+
+
 package com.hexaware.amazecare.service;
 
 
@@ -9,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.hexaware.amazecare.dto.DoctorDto;
 import com.hexaware.amazecare.dto.LoginResponse;
+import com.hexaware.amazecare.entities.Admin;
 import com.hexaware.amazecare.entities.Appointment;
 import com.hexaware.amazecare.entities.Doctor;
 import com.hexaware.amazecare.exception.AppointmentNotFoundException;
@@ -40,12 +51,6 @@ public class DoctorServiceImp implements IDoctorService {
 
 	    @Autowired
 	    private JwtService jwtService;
-
-//	    @Override
-//	    public Doctor addDoctor(Doctor doctor) {
-//	        log.info("Adding new doctor:", doctor.getName());
-//	        return doctorRepository.save(doctor);
-//	    }
 	    
 	    public Doctor addDoctor(DoctorDto doctorDto) {
 	        log.info("Adding new doctor: {}", doctorDto.getName());
@@ -61,8 +66,6 @@ public class DoctorServiceImp implements IDoctorService {
 	        doctor.setQualification(doctorDto.getQualification());
 	        doctor.setDesignation(doctorDto.getDesignation());
 	        doctor.setEmail(doctorDto.getEmail());
-
-	        // Hash password here
 	        doctor.setPasswordDoctor(passwordEncoder.encode(doctorDto.getPasswordDoctor()));
 	        doctor.setContactNumber(doctorDto.getContactNumber());
 
@@ -89,17 +92,6 @@ public class DoctorServiceImp implements IDoctorService {
 	        return doctorRepository.save(existingDoctor);
 	    }
 
-//	    @Override
-//	    public Doctor loginDoctor(String email, String passwordDoctor) {
-//	    	Doctor doctor = doctorRepository.findByEmailAndPasswordDoctor(email, passwordDoctor).orElseThrow(() -> {
-//	    	 log.error("Invalid login for email:", email);
-//	    	 return new DoctorNotFoundException("Invalid email or password");
-//	    	 });
-//
-//	    	return doctor;
-//	    }
-	    
-	   
 
 	    @Override
 	    public Doctor getDoctorById(int doctorId) {
@@ -181,4 +173,14 @@ public class DoctorServiceImp implements IDoctorService {
 }
 
 	 
-
+//public LoginResponse loginAdmin(String email, String password) throws InvalidCredentialsException {
+//    Admin admin = adminRepository.findByEmail(email)
+//        .orElseThrow(() -> new InvalidCredentialsException("Admin not found"));
+//
+//    if (!passwordEncoder.matches(password, admin.getAdminPassword())) {
+//        throw new InvalidCredentialsException("Invalid password");
+//    }
+//
+//    String token = jwtService.generateToken(email, "ADMIN");
+//    return new LoginResponse(token, admin);
+//}

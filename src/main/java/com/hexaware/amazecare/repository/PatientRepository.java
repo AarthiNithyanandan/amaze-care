@@ -10,6 +10,6 @@ import com.hexaware.amazecare.entities.Patient;
 
 public interface PatientRepository extends  JpaRepository<Patient,Integer>  {
 
-//	Optional<Patient> findByEmailAndPasswordPatient(String email, String passwordPatient);
+
 	Optional<Patient> findByEmail(String email);
 }

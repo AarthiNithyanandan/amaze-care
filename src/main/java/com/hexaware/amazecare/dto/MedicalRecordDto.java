@@ -34,7 +34,7 @@ public class MedicalRecordDto {
     @NotNull(message = "Doctor ID is required")
     private Integer doctorId;
     
-    @NotNull(message = "Prescription ID is required")
+   
     private Integer prescriptionId;
 
 	

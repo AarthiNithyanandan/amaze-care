@@ -2,10 +2,11 @@ package com.hexaware.amazecare.dto;
 
 import java.time.LocalDate;
 
-import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class AppointmentDto {
@@ -21,10 +22,11 @@ public class AppointmentDto {
     private Integer patientId;
 
     @NotNull(message = "Appointment date is required")
-    @FutureOrPresent(message = "Appointment date must be in present or future")
+    @Future(message = "Appointment date must be in the future")
     private LocalDate appointmentDate;
 
     @NotBlank(message = "Status is required")
+    @Pattern(regexp="(?i)scheduled|accepted|rejected|completed")
     private String status;
 
     @NotBlank(message = "Symptoms are required")

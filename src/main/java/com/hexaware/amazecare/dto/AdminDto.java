@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class AdminDto {
 
 
-    private Integer adminId;  // nullable for create
+    private Integer adminId;  
 
     @NotBlank(message = "Name is required")
     private String name;

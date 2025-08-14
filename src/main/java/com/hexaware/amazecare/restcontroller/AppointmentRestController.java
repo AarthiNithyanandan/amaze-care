@@ -48,25 +48,23 @@ public class AppointmentRestController {
         return ResponseEntity.ok(updatedAppointment);
     }
 
-    
-    @GetMapping("/{appointmentId}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'DOCTOR', 'PATIENT')")
+    @GetMapping("/{appointmentId}")
     public ResponseEntity<Appointment> getAppointmentById(@PathVariable int appointmentId) {
         log.info("Received request to get appointment by ID: {}", appointmentId);
         Appointment appointment = appointmentService.getAppointmentById(appointmentId);
         return ResponseEntity.ok(appointment);
     }
 
-    
-    @GetMapping("/patient/{patientId}")
     @PreAuthorize("hasAuthority('PATIENT')")
+    @GetMapping("/patient/{patientId}")
     public ResponseEntity<List<Appointment>> getAppointmentsByPatientId(@PathVariable int patientId) {
         log.info("Received request to get appointments for patientId: {}", patientId);
         List<Appointment> appointments = appointmentService.getAppointmentsByPatientId(patientId);
         return ResponseEntity.ok(appointments);
     }
     
-
+    @PreAuthorize("hasAuthority('DOCTOR')")
     @GetMapping("/doctor/{doctorId}")
     public ResponseEntity<List<Appointment>> getAppointmentsByDoctorId(@PathVariable int doctorId) {
         log.info("Received request to get appointments for doctorId: {}", doctorId);
@@ -83,7 +81,7 @@ public class AppointmentRestController {
         return ResponseEntity.ok(appointments);
     }
 
-    
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/status")
     public ResponseEntity<List<Appointment>> getByStatus(@RequestParam String status) {
         log.info("Received request to get appointments by status: {}", status);

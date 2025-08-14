@@ -30,13 +30,6 @@ public class PatientRestController {
         return patient;
     }
 
-//    @PostMapping("/login")
-//    public LoginResponse loginPatient(@RequestParam String email, @RequestParam String password) throws InvalidCredentialsException {
-//        log.info("Login attempt for patient email: {}", email);
-//        LoginResponse patient = patientService.loginPatient(email);
-//        log.info("Patient logged in successfully: {}", email);
-//        return patient;
-//    }
 
     @PutMapping("/{patientId}")
     public Patient updatePatient(@PathVariable int patientId, @Valid @RequestBody PatientDto patientDto) {

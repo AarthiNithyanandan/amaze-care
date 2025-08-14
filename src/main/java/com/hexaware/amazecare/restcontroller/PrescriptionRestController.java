@@ -3,6 +3,7 @@ package com.hexaware.amazecare.restcontroller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -24,19 +25,17 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/prescriptions")
 @Validated
 public class PrescriptionRestController {
-
-    private final IPrescriptionService prescriptionService;
-
-    public PrescriptionRestController(IPrescriptionService prescriptionService) {
-        this.prescriptionService = prescriptionService;
-    }
-    @PreAuthorize("hasAuthority('DOCTOR')")
+	
+	 @Autowired
+	IPrescriptionService prescriptionService;
+       
+    @PreAuthorize("hasAuthority('DOCTOR','ADMIN')")
     @PostMapping("/addPrescription")
     public Prescription addPrescription(@Valid @RequestBody PrescriptionDto prescriptionDto) {
         return prescriptionService.addPrescription(prescriptionDto);
     }
     
-    @PreAuthorize("hasAuthority('DOCTOR')")
+    @PreAuthorize("hasAuthority('DOCTOR','ADMIN')")
     @PutMapping("/{prescriptionId}")
     public ResponseEntity<Prescription> updatePrescription(@PathVariable int prescriptionId,  @Valid @RequestBody PrescriptionDto prescriptionDto) {
         prescriptionDto.setPrescriptionId(prescriptionId);

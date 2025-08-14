@@ -1,3 +1,12 @@
+/*Author name:Aarthi
+ * Date modified:12-8-2025
+ * Service implementation for managing RecommendedTest entities.
+ *
+ * Responsibilities:
+ *  - Add, update, and fetch recommended tests for appointments
+ */
+
+
 package com.hexaware.amazecare.service;
 
 import java.util.List;

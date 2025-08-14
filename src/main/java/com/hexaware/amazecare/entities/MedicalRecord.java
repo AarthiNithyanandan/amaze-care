@@ -1,7 +1,9 @@
 package com.hexaware.amazecare.entities;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -14,83 +16,61 @@ import jakarta.persistence.OneToOne;
 
 @Entity
 public class MedicalRecord {
-	@Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int recordId;
-   
+    private int recordId;
+
     private String diagnosis;
     private String notes;
     private LocalDate recordDate;
-    
-   
-	@OneToOne
+
+    @OneToOne
     @JoinColumn(name = "appointment_id")
     private Appointment appointment;
 
-	@OneToOne(mappedBy = "medicalRecord", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "medicalRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Prescription prescription;
 
-    
-    
     @ManyToOne
     @JoinColumn(name = "doctor_id")
+    @JsonBackReference
     private Doctor doctor;
 
+    public MedicalRecord() {}
 
-	public LocalDate getRecordDate() {
-		return recordDate;
-	}
-	public void setRecordDate(LocalDate recordDate) {
-		this.recordDate = recordDate;
-	}
-	public MedicalRecord(int recordId, String diagnosis, String notes,LocalDate recordDate) {
-		super();
-		this.recordId = recordId;
-	
-		this.diagnosis = diagnosis;
-		this.notes = notes;
-		this.recordDate=recordDate;
-	}
-		public MedicalRecord() {
-		super();
-	}
+    public MedicalRecord(int recordId, String diagnosis, String notes, LocalDate recordDate) {
+        this.recordId = recordId;
+        this.diagnosis = diagnosis;
+        this.notes = notes;
+        this.recordDate = recordDate;
+    }
 
-	    public Appointment getAppointment() {
-			return appointment;
-		}
-		public void setAppointment(Appointment appointment) {
-			this.appointment = appointment;
-		}
-		public Prescription getPrescription() {
-			return prescription;
-		}
-		public void setPrescription(Prescription prescription) {
-			this.prescription = prescription;
-		}
-		public Doctor getDoctor() {
-			return doctor;
-		}
-		public void setDoctor(Doctor doctor) {
-			this.doctor = doctor;
-		}
-	public int getRecordId() {
-		return recordId;
-	}
-	public void setRecordId(int recordId) {
-		this.recordId = recordId;
-	}
+    public int getRecordId() { return recordId; }
+    public void setRecordId(int recordId) { this.recordId = recordId; }
 
-	public String getDiagnosis() {
-		return diagnosis;
-	}
-	public void setDiagnosis(String diagnosis) {
-		this.diagnosis = diagnosis;
-	}
-	public String getNotes() {
-		return notes;
-	}
-	public void setNotes(String notes) {
-		this.notes = notes;
-	}
-    
+    public String getDiagnosis() { return diagnosis; }
+    public void setDiagnosis(String diagnosis) { this.diagnosis = diagnosis; }
+
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
+
+    public LocalDate getRecordDate() { return recordDate; }
+    public void setRecordDate(LocalDate recordDate) { this.recordDate = recordDate; }
+
+    public Appointment getAppointment() { return appointment; }
+    public void setAppointment(Appointment appointment) { this.appointment = appointment; }
+
+    public Prescription getPrescription() { return prescription; }
+    public void setPrescription(Prescription prescription) {
+        this.prescription = prescription;
+        if (prescription != null) {
+            prescription.setMedicalRecord(this); 
+        }
+    }
+
+    public Doctor getDoctor() { return doctor; }
+    public void setDoctor(Doctor doctor) { this.doctor = doctor; }
 }
+
