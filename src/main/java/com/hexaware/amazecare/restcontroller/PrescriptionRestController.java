@@ -29,13 +29,13 @@ public class PrescriptionRestController {
 	 @Autowired
 	IPrescriptionService prescriptionService;
        
-    @PreAuthorize("hasAuthority('DOCTOR','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('DOCTOR','ADMIN')")
     @PostMapping("/addPrescription")
     public Prescription addPrescription(@Valid @RequestBody PrescriptionDto prescriptionDto) {
         return prescriptionService.addPrescription(prescriptionDto);
     }
     
-    @PreAuthorize("hasAuthority('DOCTOR','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('DOCTOR','ADMIN')")
     @PutMapping("/{prescriptionId}")
     public ResponseEntity<Prescription> updatePrescription(@PathVariable int prescriptionId,  @Valid @RequestBody PrescriptionDto prescriptionDto) {
         prescriptionDto.setPrescriptionId(prescriptionId);

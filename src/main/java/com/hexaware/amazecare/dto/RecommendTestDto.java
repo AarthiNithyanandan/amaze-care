@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RecommendTestDto {
 
-	
-	 private Integer testId;
+	private Integer testId; 
+	 private Integer appointmentId;
 
 	    @NotBlank(message = "Test name is required")
 	    private String testName;
@@ -32,6 +32,5 @@ public class RecommendTestDto {
 
 	    @Size(max = 50, message = "Duration can be up to 50 characters")
 	    private String duration;
-	    @Min(value=0,message="Medical record id should be a positive value")
-	    private int recordId;
+	   
 }

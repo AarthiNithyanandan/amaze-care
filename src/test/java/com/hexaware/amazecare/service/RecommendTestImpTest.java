@@ -63,7 +63,7 @@ class RecommendTestImpTest {
         dto.setPreparationInstructions("Fasting for 8 hours");
         dto.setCost(500.0f);
         dto.setDuration("1 day");
-        dto.setRecordId(testAppointment.getAppointmentId()); // maps to appointmentId in addTest
+        dto.setAppointmentId(testAppointment.getAppointmentId()); // maps to appointmentId in addTest
 
         testRecommendTest = recommendTestService.addTest(dto);
     }

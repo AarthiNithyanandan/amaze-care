@@ -80,15 +80,15 @@ public class DoctorRestController {
         return ResponseEntity.ok(response);
     }
     
-    @GetMapping("/search")
-    public ResponseEntity<List<Doctor>> findByName(@RequestParam String name) {
+    @GetMapping("/search/{name}")
+    public ResponseEntity<List<Doctor>> findByName(@PathVariable String name) {
         log.info("Searching doctors by name: {}", name);
         List<Doctor> doctors = doctorService.findByName(name);
         return ResponseEntity.ok(doctors);
     }
     
-    @GetMapping("/specialization")
-    public ResponseEntity<List<Doctor>> searchDoctorsBySpecialization(@RequestParam String specialization) {
+    @GetMapping("/specialization/{specilalization}")
+    public ResponseEntity<List<Doctor>> searchDoctorsBySpecialization(@PathVariable String specialization) {
         log.info("Searching doctors by specialization: {}", specialization);
         List<Doctor> doctors = doctorService.searchDoctorsBySpecialization(specialization);
         return ResponseEntity.ok(doctors);

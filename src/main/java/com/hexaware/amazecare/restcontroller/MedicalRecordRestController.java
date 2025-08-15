@@ -51,7 +51,7 @@ public class MedicalRecordRestController {
         return ResponseEntity.ok(medicalRecord);
     }
      
-    @PreAuthorize("hasAuthority('DOCTOR','PATIENT')")
+    @PreAuthorize("hasAnyAuthority('DOCTOR', 'PATIENT')")
     @GetMapping("/{recordId}")
     public ResponseEntity<MedicalRecord> getByRecordId(@PathVariable int recordId) {
         MedicalRecord medicalRecord = medicalRecordService.getByRecordId(recordId);

@@ -36,7 +36,7 @@ public class AdminRestController {
     
 
     @PostMapping("/doctors")
-    public ResponseEntity<Doctor> addDoctor(@RequestBody DoctorDto doctorDto) {
+    public ResponseEntity<Doctor> addDoctor(@Valid @RequestBody DoctorDto doctorDto) {
         return ResponseEntity.ok(adminService.addDoctor(doctorDto));
     }
 
@@ -55,15 +55,6 @@ public class AdminRestController {
         return adminService.getAllDoctors();
     }
 
-//    @GetMapping("/doctors/specialization/{specialization}")
-//    public ResponseEntity<List<Doctor>> getBySpecialization(@PathVariable String specialization) {
-//        return ResponseEntity.ok(adminService.searchDoctorsBySpecialization(specialization));
-//    }
-//
-//    @GetMapping("/doctors/name/{name}")
-//    public ResponseEntity<List<Doctor>> findDoctorByName(@PathVariable String name) {
-//        return ResponseEntity.ok(adminService.findDoctorByName(name));
-//    }
 
     @PutMapping("/patients")
     public ResponseEntity<Patient> updatePatient(@RequestBody PatientDto patientDto) {

@@ -83,7 +83,7 @@ public class AppointmentRestController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/status")
-    public ResponseEntity<List<Appointment>> getByStatus(@RequestParam String status) {
+    public ResponseEntity<List<Appointment>> getByStatus(@PathVariable String status) {
         log.info("Received request to get appointments by status: {}", status);
         List<Appointment> appointments = appointmentService.getByStatus(status);
         return ResponseEntity.ok(appointments);

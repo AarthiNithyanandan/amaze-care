@@ -27,6 +27,7 @@ public class MedicalRecord {
 
     @OneToOne
     @JoinColumn(name = "appointment_id")
+    @JsonBackReference
     private Appointment appointment;
 
     @OneToOne(mappedBy = "medicalRecord", cascade = CascadeType.ALL, orphanRemoval = true)

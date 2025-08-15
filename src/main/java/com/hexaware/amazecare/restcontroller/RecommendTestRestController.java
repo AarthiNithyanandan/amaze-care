@@ -37,7 +37,7 @@ public class RecommendTestRestController {
     }
 
     
-    @PreAuthorize("hasAuthority('DOCTOR','ADMIN')")
+    @PreAuthorize("hasAnyAuthority('DOCTOR','ADMIN')")
     @PutMapping("/{testId}")
     public RecommendTest updateRecommendTest(@PathVariable int testId, @Valid @RequestBody RecommendTestDto testDto) {
         log.info("Received request to update recommended test with ID: {}", testId);
@@ -53,8 +53,8 @@ public class RecommendTestRestController {
     }
   
     @PreAuthorize("hasAnyAuthority('DOCTOR', 'ADMIN')")
-    @GetMapping("/get/test-name")
-    public List<RecommendTest> getByTestName(@RequestParam String testName) {
+    @GetMapping("/get/{testName}")
+    public List<RecommendTest> getByTestName(@PathVariable String testName) {
         log.info("Received request to get recommended tests by test name: {}", testName);
         return recommendTestService.getByTestName(testName);
     }

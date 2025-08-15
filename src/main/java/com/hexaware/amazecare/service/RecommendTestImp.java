@@ -38,9 +38,9 @@ public class RecommendTestImp implements IRecommendTest{
 	@Override
      public RecommendTest addTest(RecommendTestDto testDto) {
         log.info("Adding new recommended test: {}", testDto.getTestName());
-        Appointment appointment = appointmentRepository.findById(testDto.getRecordId()).orElseThrow(() -> {
-        log.error("Appointment not found for ID: {}", testDto.getRecordId());
-        return new AppointmentNotFoundException("Appointment not found with ID: " + testDto.getRecordId());
+        Appointment appointment = appointmentRepository.findById(testDto.getAppointmentId()).orElseThrow(() -> {
+        log.error("Appointment not found for ID: {}", testDto.getAppointmentId());
+        return new AppointmentNotFoundException("Appointment not found with ID: " + testDto.getAppointmentId());
           });
         RecommendTest entity = new RecommendTest();
         entity.setTestName(testDto.getTestName());
@@ -55,10 +55,10 @@ public class RecommendTestImp implements IRecommendTest{
 
 	@Override
 	public RecommendTest updateTestReport(RecommendTestDto testDto) {
-	     log.info("Updating recommended test with ID: {}", testDto.getTestId());
-	     RecommendTest existing = recommendTestRepository.findById(testDto.getTestId()).orElseThrow(() -> {
-	      log.error("Test not found with ID: {}", testDto.getTestId());
-	     return new RecommendTestNotFoundException("Test not found with ID: " + testDto.getTestId());
+	     log.info("Updating recommended test with ID: {}", testDto.getAppointmentId());
+	     RecommendTest existing = recommendTestRepository.findById(testDto.getAppointmentId()).orElseThrow(() -> {
+	      log.error("Test not found with ID: {}", testDto.getAppointmentId());
+	     return new RecommendTestNotFoundException("Test not found with ID: " + testDto.getAppointmentId());
 	      });
 	     existing.setTestName(testDto.getTestName());
 	      existing.setDescription(testDto.getDescription());

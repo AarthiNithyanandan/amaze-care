@@ -57,31 +57,40 @@ public class MedicalRecordServiceImp implements IMedicalRecordService {
 	 private PrescriptionRepository prescriptionRepository;
 	    
 	 @Override
-	    public MedicalRecord addMedicalRecord(MedicalRecordDto recordDto) {
-	        log.info("Adding new medical record for appointment ID: {}", recordDto.getAppointmentId());
-	        Appointment appointment = appointmentRepository.findById(recordDto.getAppointmentId()).orElseThrow(() -> {
-	        log.error("Appointment not found with ID: {}", recordDto.getAppointmentId());
-	        return new AppointmentNotFoundException("Appointment not found with ID: " + recordDto.getAppointmentId());
-	                });
-	        Doctor doctor = doctorRepository.findById(recordDto.getDoctorId()).orElseThrow(() -> {
-	        log.error("Doctor not found with ID:", recordDto.getDoctorId());
-	             return new DoctorNotFoundException("Doctor not found with ID: " + recordDto.getDoctorId());
-	                });
-	     
-	        Prescription prescription = prescriptionRepository.findById(recordDto.getPrescriptionId()).orElseThrow(() -> {
-	        	 return new PrescriptionNotFoundException("Prescription not found with ID: " + recordDto.getPrescriptionId());
-	        	    });
-	        
+	 public MedicalRecord addMedicalRecord(MedicalRecordDto recordDto) {
+		    log.info("Adding new medical record for appointment ID: {}", recordDto.getAppointmentId());
 
-	        MedicalRecord medicalRecord = new MedicalRecord();
-	        medicalRecord.setDiagnosis(recordDto.getDiagnosis());
-	        medicalRecord.setNotes(recordDto.getNotes());
-	        medicalRecord.setRecordDate(recordDto.getRecordDate());
-	        medicalRecord.setAppointment(appointment);
-	        medicalRecord.setDoctor(doctor);
-	        medicalRecord.setPrescription(prescription);
-	        return medicalRecordRepository.save(medicalRecord);
-	    }
+		    Appointment appointment = appointmentRepository.findById(recordDto.getAppointmentId())
+		        .orElseThrow(() -> {
+		            log.error("Appointment not found with ID: {}", recordDto.getAppointmentId());
+		            return new AppointmentNotFoundException("Appointment not found with ID: " + recordDto.getAppointmentId());
+		        });
+
+		    Doctor doctor = doctorRepository.findById(recordDto.getDoctorId())
+		        .orElseThrow(() -> {
+		            log.error("Doctor not found with ID: {}", recordDto.getDoctorId());
+		            return new DoctorNotFoundException("Doctor not found with ID: " + recordDto.getDoctorId());
+		        });
+
+		    Prescription prescription = null;
+		    if (recordDto.getPrescriptionId() != null) {
+		        prescription = prescriptionRepository.findById(recordDto.getPrescriptionId())
+		            .orElseThrow(() -> new PrescriptionNotFoundException(
+		                "Prescription not found with ID: " + recordDto.getPrescriptionId()
+		            ));
+		    }
+
+		    MedicalRecord medicalRecord = new MedicalRecord();
+		    medicalRecord.setDiagnosis(recordDto.getDiagnosis());
+		    medicalRecord.setNotes(recordDto.getNotes());
+		    medicalRecord.setRecordDate(recordDto.getRecordDate());
+		    medicalRecord.setAppointment(appointment);
+		    medicalRecord.setDoctor(doctor);
+		    medicalRecord.setPrescription(prescription); // will be null if not provided
+
+		    return medicalRecordRepository.save(medicalRecord);
+		}
+
 
 
 
