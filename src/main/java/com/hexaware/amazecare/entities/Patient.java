@@ -2,6 +2,7 @@ package com.hexaware.amazecare.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
@@ -53,6 +54,7 @@ public class Patient {
 		}
 		@OneToMany(mappedBy = "patient")
 		@JsonManagedReference
+		 @JsonIgnore 
 	    private List<Appointment> appointments;
 
 		public Patient(int patientId, String name, String gender, String contactNumber, String email, int age,

@@ -61,7 +61,7 @@ public class PrescriptionServiceImpTest {
 
         testDoctor = new Doctor();
         testDoctor.setName("Dr. Nisha");
-        testDoctor.setSpecialty("General Medicine");
+        testDoctor.setSpeciality("General Medicine");
         testDoctor.setEmail("nisha@amazecare.com");
         testDoctor.setPasswordDoctor("nisha123");
         testDoctor.setContactNumber("9998887770");

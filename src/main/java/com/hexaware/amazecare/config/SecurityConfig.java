@@ -1,4 +1,5 @@
 package com.hexaware.amazecare.config;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -41,9 +42,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
+        .cors(withDefaults())
+        
             .authorizeHttpRequests(auth -> auth
    
                 .requestMatchers("/api/auth/**").permitAll()
+                
+                .requestMatchers("/api/doctors/all").permitAll() 
                 .requestMatchers("/api/patients/register").permitAll() 
                 
                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")

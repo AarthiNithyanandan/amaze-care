@@ -43,7 +43,7 @@ class RecommendTestImpTest {
         // Create doctor
         testDoctor = new Doctor();
         testDoctor.setName("Test Doctor");
-        testDoctor.setSpecialty("Neurology");
+        testDoctor.setSpeciality("Neurology");
         testDoctor.setExperience(8);
         testDoctor.setQualification("MBBS");
         testDoctor.setDesignation("Consultant");

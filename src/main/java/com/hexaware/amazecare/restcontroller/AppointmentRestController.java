@@ -1,12 +1,13 @@
 package com.hexaware.amazecare.restcontroller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,11 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.amazecare.dto.AppointmentDto;
 import com.hexaware.amazecare.entities.Appointment;
+import com.hexaware.amazecare.exception.AppointmentNotFoundException;
 import com.hexaware.amazecare.service.IAppointmentService;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/appointments")
 @Slf4j
@@ -40,9 +42,9 @@ public class AppointmentRestController {
     }
     
     
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'DOCTOR')")
-    @PutMapping("/{appointmentId}/status")
-    public ResponseEntity<Appointment> updateAppointmentStatus(@PathVariable int appointmentId, @RequestParam String status) {
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'DOCTOR','PATIENT')")
+    @PutMapping("/{appointmentId}/{status}")
+    public ResponseEntity<Appointment> updateAppointmentStatus(@PathVariable int appointmentId, @PathVariable String status) {
         log.info("Received request to update status of appointmentId: {} to {}", appointmentId, status);
         Appointment updatedAppointment = appointmentService.updateAppointmentStatus(appointmentId, status);
         return ResponseEntity.ok(updatedAppointment);
@@ -58,17 +60,17 @@ public class AppointmentRestController {
 
     @PreAuthorize("hasAuthority('PATIENT')")
     @GetMapping("/patient/{patientId}")
-    public ResponseEntity<List<Appointment>> getAppointmentsByPatientId(@PathVariable int patientId) {
+    public ResponseEntity<List<AppointmentDto>> getAppointmentsByPatientId(@PathVariable int patientId) {
         log.info("Received request to get appointments for patientId: {}", patientId);
-        List<Appointment> appointments = appointmentService.getAppointmentsByPatientId(patientId);
+        List<AppointmentDto> appointments = appointmentService.getAppointmentsByPatientId(patientId);
         return ResponseEntity.ok(appointments);
     }
     
     @PreAuthorize("hasAuthority('DOCTOR')")
     @GetMapping("/doctor/{doctorId}")
-    public ResponseEntity<List<Appointment>> getAppointmentsByDoctorId(@PathVariable int doctorId) {
+    public ResponseEntity<List<AppointmentDto>> getAppointmentsByDoctorId(@PathVariable int doctorId) {
         log.info("Received request to get appointments for doctorId: {}", doctorId);
-        List<Appointment> appointments = appointmentService.getAppointmentsByDoctorId(doctorId);
+        List<AppointmentDto> appointments = appointmentService.getAppointmentsByDoctorId(doctorId);
         return ResponseEntity.ok(appointments);
     }
     
@@ -90,12 +92,32 @@ public class AppointmentRestController {
     }
 
     
-    @DeleteMapping("/patient/{patientId}/cancel")
+//    @DeleteMapping("/patient/{patientId}/cancel")
+//    @PreAuthorize("hasAuthority('PATIENT')")
+//    public ResponseEntity<String> cancelAppointmentsByPatientId(@PathVariable int patientId) {
+//        log.info("Received request to cancel appointments for patientId: {}", patientId);
+//        int cancelledCount = appointmentService.cancelAppointmentByPatientId(patientId);
+//        return ResponseEntity.ok(cancelledCount + " appointments cancelled for patientId: " + patientId);
+//    }
+
+    
+    @PutMapping("/{appointmentId}/cancel")
     @PreAuthorize("hasAuthority('PATIENT')")
-    public ResponseEntity<String> cancelAppointmentsByPatientId(@PathVariable int patientId) {
-        log.info("Received request to cancel appointments for patientId: {}", patientId);
-        int cancelledCount = appointmentService.cancelAppointmentByPatientId(patientId);
-        return ResponseEntity.ok(cancelledCount + " appointments cancelled for patientId: " + patientId);
+    public ResponseEntity<String> cancelAppointment(@PathVariable int appointmentId) {
+        log.info("Received request to cancel appointmentId: {}", appointmentId);
+        Appointment appointment = appointmentService.cancelAppointmentById(appointmentId);
+        return ResponseEntity.ok("Appointment " + appointmentId + " cancelled successfully");
+    }
+    
+    @GetMapping("/patient/{patientId}/counts")
+    @PreAuthorize("hasAuthority('PATIENT')")
+    public ResponseEntity<Map<String, Long>> getAppointmentCounts(@PathVariable int patientId) {
+        try {
+            Map<String, Long> counts = appointmentService.getAppointmentCountsByPatientId(patientId);
+            return ResponseEntity.ok(counts);
+        } catch (AppointmentNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
     
 }

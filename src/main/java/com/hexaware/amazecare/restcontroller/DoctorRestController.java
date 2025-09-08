@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,18 +15,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hexaware.amazecare.dto.DoctorDto;
-import com.hexaware.amazecare.dto.LoginResponse;
 import com.hexaware.amazecare.entities.Doctor;
-import com.hexaware.amazecare.exception.InvalidCredentialsException;
+import com.hexaware.amazecare.service.IAdminService;
 import com.hexaware.amazecare.service.IDoctorService;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @Slf4j
 @RestController
 @RequestMapping("/api/doctors")
@@ -33,6 +32,9 @@ public class DoctorRestController {
 
     @Autowired
     private IDoctorService doctorService;
+    
+    @Autowired
+    private IAdminService adminService;
 
     @PostMapping("/register")
     public ResponseEntity<Doctor> addDoctor(@Valid @RequestBody DoctorDto doctorDto) {
@@ -87,12 +89,19 @@ public class DoctorRestController {
         return ResponseEntity.ok(doctors);
     }
     
-    @GetMapping("/specialization/{specilalization}")
+    @GetMapping("/specialization/{specialization}")
     public ResponseEntity<List<Doctor>> searchDoctorsBySpecialization(@PathVariable String specialization) {
         log.info("Searching doctors by specialization: {}", specialization);
         List<Doctor> doctors = doctorService.searchDoctorsBySpecialization(specialization);
         return ResponseEntity.ok(doctors);
     }
+    
+    
+    @GetMapping("/all")
+    public ResponseEntity<List<Doctor>> getAllDoctorsForHome() {
+        return ResponseEntity.ok(adminService.getAllDoctors());
+    }
+
     
     
     //

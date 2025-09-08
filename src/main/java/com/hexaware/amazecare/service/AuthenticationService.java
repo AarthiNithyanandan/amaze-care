@@ -41,7 +41,7 @@ public class AuthenticationService {
         }
 
         String token = jwtService.generateToken(email, "ADMIN");
-        return new LoginResponse(token, admin);
+        return new LoginResponse(token, admin,"ADMIN");
     }
 
     public LoginResponse loginDoctor(String email, String rawPassword) throws InvalidCredentialsException {
@@ -52,7 +52,7 @@ public class AuthenticationService {
             throw new InvalidCredentialsException("Invalid email or password");
         }
         String token = jwtService.generateToken(email, "DOCTOR");
-        return new LoginResponse(token, doctor);
+        return new LoginResponse(token, doctor,"DOCTOR");
     }
 
     public LoginResponse loginPatient(String email, String rawPassword) throws InvalidCredentialsException {
@@ -63,7 +63,7 @@ public class AuthenticationService {
             throw new InvalidCredentialsException("Invalid email or password");
         }
         String token = jwtService.generateToken(email, "PATIENT");
-        return new LoginResponse(token, patient);
+        return new LoginResponse(token, patient,"PATIENT");
 
     }
 }

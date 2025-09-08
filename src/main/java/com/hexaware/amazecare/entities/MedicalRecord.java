@@ -3,10 +3,12 @@ package com.hexaware.amazecare.entities;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,8 +32,9 @@ public class MedicalRecord {
     @JsonBackReference
     private Appointment appointment;
 
-    @OneToOne(mappedBy = "medicalRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "medicalRecord", cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference
+    @JsonIgnore
     private Prescription prescription;
 
     @ManyToOne

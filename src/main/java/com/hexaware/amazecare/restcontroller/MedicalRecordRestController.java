@@ -44,7 +44,7 @@ public class MedicalRecordRestController {
         return medicalRecordService.updateMedicalRecord(medicalRecordDto);
     }
     
-    @PreAuthorize("hasAuthority('DOCTOR')")
+    @PreAuthorize("hasAnyAuthority('DOCTOR','PATIENT')")
     @GetMapping("/appointment/{appointmentId}")
     public ResponseEntity<MedicalRecord> getByAppointmentId(@PathVariable int appointmentId) {
         MedicalRecord medicalRecord = medicalRecordService.getByAppointmentId(appointmentId);

@@ -28,6 +28,7 @@ public class Doctor {
     
     @OneToMany(mappedBy = "doctor")
     @JsonManagedReference
+    
     private List<Appointment> appointments;
     
     @OneToMany(mappedBy = "doctor")
@@ -39,7 +40,7 @@ public class Doctor {
     @JsonManagedReference
     private List<Prescription> prescriptions;
     
-	public Doctor(int doctorId, String name, String specialty, int experience, String qualification, String designation,
+	public Doctor(int doctorId, String name, String speciality, int experience, String qualification, String designation,
 			String email, String passwordDoctor, String contactNumber) {
 		super();
 		this.doctorId = doctorId;
@@ -88,10 +89,10 @@ public class Doctor {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getSpecialty() {
+	public String getSpeciality() {
 		return speciality;
 	}
-	public void setSpecialty(String speciality) {
+	public void setSpeciality(String speciality) {
 		this.speciality = speciality;
 	}
 	public int getExperience() {

@@ -13,7 +13,7 @@ import com.hexaware.amazecare.exception.InvalidCredentialsException;
 import com.hexaware.amazecare.service.IPatientService;
 
 import jakarta.validation.Valid;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @Slf4j
 @RestController
 @RequestMapping("/api/patients")
@@ -39,4 +39,5 @@ public class PatientRestController {
         log.info("Patient updated successfully with ID: {}", updated.getPatientId());
         return updated;
     }
+    
 }

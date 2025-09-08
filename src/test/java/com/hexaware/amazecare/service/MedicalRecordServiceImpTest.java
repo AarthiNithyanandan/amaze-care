@@ -50,7 +50,7 @@ class MedicalRecordServiceImpTest {
    
         testDoctor = new Doctor();
         testDoctor.setName("Test Doctor");
-        testDoctor.setSpecialty("Cardiology");
+        testDoctor.setSpeciality("Cardiology");
         testDoctor.setExperience(12);
         testDoctor.setQualification("MD");
         testDoctor.setDesignation("Senior Consultant");

@@ -48,7 +48,7 @@ public class DoctorServiceImpTest {
 
         testDoctor = new Doctor();
         testDoctor.setName("Dr. Meera");
-        testDoctor.setSpecialty("Dermatology");
+        testDoctor.setSpeciality("Dermatology");
         testDoctor.setEmail("meera@amazecare.com");
         testDoctor.setPasswordDoctor("meera123");
         testDoctor.setContactNumber("9998887770");
@@ -145,7 +145,7 @@ public class DoctorServiceImpTest {
     public void testSearchDoctorsBySpecialization() {
         List<Doctor> doctors = doctorService.searchDoctorsBySpecialization("Dermatology");
         assertFalse(doctors.isEmpty());
-        assertEquals("Dermatology", doctors.get(0).getSpecialty());
+        assertEquals("Dermatology", doctors.get(0).getSpeciality());
     }
 
     @Test

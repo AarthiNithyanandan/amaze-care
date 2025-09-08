@@ -61,7 +61,7 @@ public class DoctorServiceImp implements IDoctorService {
 
 	        Doctor doctor = new Doctor();
 	        doctor.setName(doctorDto.getName());
-	        doctor.setSpecialty(doctorDto.getSpeciality());
+	        doctor.setSpeciality(doctorDto.getSpeciality());
 	        doctor.setExperience(doctorDto.getExperience());
 	        doctor.setQualification(doctorDto.getQualification());
 	        doctor.setDesignation(doctorDto.getDesignation());
@@ -81,12 +81,12 @@ public class DoctorServiceImp implements IDoctorService {
 	        });
 	 
 	        existingDoctor.setName(doctorDto.getName());
-	        existingDoctor.setSpecialty(doctorDto.getSpeciality());
+	        existingDoctor.setSpeciality(doctorDto.getSpeciality());
 	        existingDoctor.setExperience(doctorDto.getExperience());
 	        existingDoctor.setQualification(doctorDto.getQualification());
 	        existingDoctor.setDesignation(doctorDto.getDesignation());
 	        existingDoctor.setEmail(doctorDto.getEmail());
-	        existingDoctor.setPasswordDoctor(doctorDto.getPasswordDoctor());
+	        existingDoctor.setPasswordDoctor(passwordEncoder.encode(doctorDto.getPasswordDoctor()));
 	        existingDoctor.setContactNumber(doctorDto.getContactNumber());
 	        
 	        return doctorRepository.save(existingDoctor);

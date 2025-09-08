@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 
 import com.hexaware.amazecare.entities.Appointment;
 
+import jakarta.transaction.Transactional;
+
 public interface AppointmentRepository  extends  JpaRepository<Appointment,Integer> {
 
 	
@@ -16,6 +18,12 @@ public interface AppointmentRepository  extends  JpaRepository<Appointment,Integ
 //	 @Modifying
 //	 @Query("update Appointment a set a.status=:status where a.appointmentId=:appointmentId")
 //	 int  updateAppointmentStatus(@Param("appointmentId")int appointmentId,@Param("status") String status);
+//     List<AppointmentDto> findByPatientPatientId(int patientId);
      List<Appointment> findByPatientPatientId(int patientId);
      List<Appointment> findByDoctorDoctorId(int doctorId);
+     
+     @Modifying
+     @Transactional
+     @Query("UPDATE Appointment a SET a.status = :status WHERE a.appointmentId = :id")
+     int updateStatusOnly(@Param("id") int appointmentId, @Param("status") String status);
 }

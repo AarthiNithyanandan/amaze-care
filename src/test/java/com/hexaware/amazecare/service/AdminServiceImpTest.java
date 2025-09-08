@@ -48,7 +48,7 @@ public class AdminServiceImpTest {
 
         testDoctor = new Doctor();
         testDoctor.setName("Dr. Arvind");
-        testDoctor.setSpecialty("Orthopedics");
+        testDoctor.setSpeciality("Orthopedics");
         testDoctor.setEmail("arvind@amazecare.com");
         testDoctor.setPasswordDoctor("arvind123");
         testDoctor.setContactNumber("9998887770");

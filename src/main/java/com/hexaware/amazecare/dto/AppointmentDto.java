@@ -1,32 +1,34 @@
 package com.hexaware.amazecare.dto;
-
 import java.time.LocalDate;
+import java.time.LocalTime;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AppointmentDto {
 
     private Integer appointmentId;
 
-    @NotNull(message = "Doctor ID is required")
-    @Min(value = 1, message = "Doctor ID must be a positive number")
     private Integer doctorId;
-
-    @NotNull(message = "Patient ID is required")
-    @Min(value = 1, message = "Patient ID must be a positive number")
     private Integer patientId;
+    private Integer medicalRecordId;  
+    private Integer prescriptionId;
+
+    private String doctorName;   
+    private String patientName;  
 
     @NotNull(message = "Appointment date is required")
-    @Future(message = "Appointment date must be in the future")
     private LocalDate appointmentDate;
 
+    @NotNull(message = "Appointment time is required")
+    private LocalTime appointmentTime;   
+
     @NotBlank(message = "Status is required")
-    @Pattern(regexp="(?i)scheduled|accepted|rejected|completed")
+    @Pattern(regexp = "(?i)scheduled|confirmed|cancelled|completed")
     private String status;
 
     @NotBlank(message = "Symptoms are required")
@@ -36,68 +38,36 @@ public class AppointmentDto {
     @NotBlank(message = "Visit type is required")
     private String visitType;
 
-    public Integer getAppointmentId() {
-        return appointmentId;
-    }
-
-    public void setAppointmentId(Integer appointmentId) {
+    public AppointmentDto(Integer appointmentId, Integer doctorId, Integer patientId,
+            String doctorName, String patientName, String status,
+            LocalDate appointmentDate, LocalTime appointmentTime,
+            String symptoms, String visitType) {
         this.appointmentId = appointmentId;
-    }
-
-    public Integer getDoctorId() {
-        return doctorId;
-    }
-
-    public void setDoctorId(Integer doctorId) {
         this.doctorId = doctorId;
-    }
-
-    public Integer getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(Integer patientId) {
         this.patientId = patientId;
-    }
-
-    public LocalDate getAppointmentDate() {
-        return appointmentDate;
-    }
-
-    public void setAppointmentDate(LocalDate appointmentDate) {
-        this.appointmentDate = appointmentDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
+        this.doctorName = doctorName;
+        this.patientName = patientName;
         this.status = status;
-    }
-
-    public String getSymptoms() {
-        return symptoms;
-    }
-
-    public void setSymptoms(String symptoms) {
+        this.appointmentDate = appointmentDate;
+        this.appointmentTime = appointmentTime;
         this.symptoms = symptoms;
-    }
-
-    public String getVisitType() {
-        return visitType;
-    }
-
-    public void setVisitType(String visitType) {
         this.visitType = visitType;
     }
+    public AppointmentDto(int appointmentId, int doctorId, int patientId, String doctorName, String patientName,
+            String status, LocalDate appointmentDate, LocalTime appointmentTime, String symptoms,
+            String visitType, Integer medicalRecordId) {
+this.appointmentId = appointmentId;
+this.doctorId = doctorId;
+this.patientId = patientId;
+this.doctorName = doctorName;
+this.patientName = patientName;
+this.status = status;
+this.appointmentDate = appointmentDate;
+this.appointmentTime = appointmentTime;
+this.symptoms = symptoms;
+this.visitType = visitType;
+this.medicalRecordId = medicalRecordId;
 
- 
-    @Override
-    public String toString() {
-        return "AppointmentDto [appointmentId=" + appointmentId + ", doctorId=" + doctorId 
-                + ", patientId=" + patientId + ", appointmentDate=" + appointmentDate 
-                + ", status=" + status + ", symptoms=" + symptoms + ", visitType=" + visitType + "]";
-    }
 }
 
+}

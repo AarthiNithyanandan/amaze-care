@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,7 @@ import com.hexaware.amazecare.service.IAdminService;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @Slf4j
 @RestController
 @RequestMapping("/api/admin")
@@ -49,6 +50,8 @@ public class AdminRestController {
     public ResponseEntity<String> deleteDoctor(@PathVariable int id) {
         return ResponseEntity.ok(adminService.deleteDoctor(id));
     }
+    
+    
     @GetMapping("/doctors")
     public List<Doctor> getAllDoctors() {
         log.info("API Call: GET /admin/doctors");
